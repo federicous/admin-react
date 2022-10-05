@@ -296,7 +296,8 @@ const traductor = (palabra) => {
     marca: "Marca",
     image: "Imagen",
     timestamp: "timestamp",
-    uuid: "uuid"
+    uuid: "uuid",
+    __v: "Version"
   }
   return Diccionario[palabra]
 }
@@ -324,7 +325,7 @@ const traductor = (palabra) => {
               (() => {
                 let columnas = []
                                   for (const key in producto) {
-					let propiedad = ["__v","timestamp","reftekbond","tekbondcodigo","label","codigobarra","marca"];
+					let propiedad = ["__v","timestamp","reftekbond","tekbondcodigo","label","codigobarra","marca","__v"];
 					if (propiedad.includes(key)) {
 						continue
 					}

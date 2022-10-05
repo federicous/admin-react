@@ -23,6 +23,7 @@ import Ordenes from '../Ordenes/Ordenes';
 import Listas from '../Listas/Listas';
 import Usuarios from '../Usuarios/Usuarios';
 import EditarProducto from '../EditarProducto/EditarProducto'
+import AddProduct from '../AddProduct/AddProduct'
 // import ApiQuery from "../utils/apiQuery/apiQuery"
 // let apiQuery = new ApiQuery();
 
@@ -145,6 +146,7 @@ function ResponsiveDrawer(props) {
           <Toolbar />
           <Routes>
           <Route exact path="/productos/" element={<Productos />} />
+          <Route exact path="/productos/agregar/" element={<AddProduct />} />
           <Route exact path="/producto/:id" element={<EditarProducto />} />
           <Route exact path="/ordenes" element={<Ordenes />} />
           <Route exact path="/listas" element={<Listas />} />
