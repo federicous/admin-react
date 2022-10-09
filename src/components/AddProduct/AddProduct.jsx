@@ -12,16 +12,14 @@ import {
   InputLabel,
   FormControl,
 } from "@mui/material";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { localidades } from "../utils/localidades";
-import { config } from "../../config/config";
-import axios from "axios";
 import ApiQuery from "../utils/apiQuery/apiQuery";
-import GetAppIcon from "@mui/icons-material/Image";
 import FileInput from "../FileInput/FileInput";
 
 let apiQuery = new ApiQuery();
 
+let sitecnia = "//SITECNIA"
 function Copyright(props) {
   return (
     <Typography
@@ -32,7 +30,7 @@ function Copyright(props) {
     >
       {"Desarrollado por "}
       <Link to={`/home`} color="inherit">
-        //SITECNIA
+        {sitecnia}
       </Link>{" "}
       {new Date().getFullYear()}
       {"."}
@@ -40,20 +38,8 @@ function Copyright(props) {
   );
 }
 
-let tekbondCampos = [
-  "code",
-  "linea",
-  "contenido",
-  "presentacion",
-  "color",
-  "unidades",
-  "usd",
-  "pvpusd",
-  "iva",
-];
-
+let tekbondCampos = ["code", "linea", "contenido", "presentacion", "color", "unidades", "usd", "pvpusd", "iva",];
 let bremenCampos = ["name", "code", "price", "iva", "origin", "description"];
-
 let kantonCampos = ["name", "code", "price", "iva", "pricepack", "description"];
 
 const campos = (lista) => {
@@ -71,12 +57,7 @@ function capitalizeFirstLetter(string) {
   return cadena.charAt(0).toUpperCase() + cadena.slice(1);
 }
 
-export default function SignUp() {
-  let navigate = useNavigate();
-  //   const {id} = useParams()
-  let id = "62fe8cdb80972ad19001c927";
-  // let id = "62fe8cf380972ad19001e1c5"
-
+export default function AddProduct() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [provincia, setProvincia] = React.useState("");
   const [localidadArray, setLocalidadArray] = React.useState([]);
@@ -98,37 +79,15 @@ export default function SignUp() {
   const [brand, setBrand] = React.useState([]);
   const [categoria, setCategoria] = useState("");
   const [lista, setLista] = useState("");
-  // React.useEffect(() => {
-  //   console.log(provincias);
-  // }, [])
+  const [iva, setIva] = useState("");
 
   useEffect(() => {
     let cancel = false;
     apiQuery
-      .get(`/api/product/${id}`)
+      .get(`/api/categorias/${lista}/label`)
       .then((respuesta) => {
         if (cancel) return;
-        // console.log(respuesta);
-        // Object.getOwnPropertyNames(respuesta).map((item)=>{console.log(item);})
-        // console.log(JSON.stringify(respuesta, null, 4)[2]);
-        // for (const key in respuesta) {
-        //   if (Object.hasOwnProperty.call(respuesta, key)) {
-        //     const element = respuesta[key];
-        //     // console.log(`${element} - ${key}`);
-        //     console.log(`${key}`);
-        //   }
-        // }
-        setProducto(respuesta);
-        apiQuery
-          .get(`/api/categorias/${lista}/label`)
-          .then((respuesta) => {
-            console.log(respuesta);
-            if (cancel) return;
-            setNavList([...respuesta]);
-          })
-          .catch((error) => {
-            error = new Error();
-          });
+        setNavList([...respuesta]);
       })
       .catch((error) => {
         error = new Error();
@@ -140,18 +99,15 @@ export default function SignUp() {
 
   useEffect(() => {
     let cancel = false;
-
     apiQuery
       .get(`/api/categorias/lista`)
       .then((respuesta) => {
-        console.log(respuesta);
         if (cancel) return;
         setBrand([...respuesta]);
       })
       .catch((error) => {
         error = new Error();
       });
-
     return () => {
       cancel = true;
     };
@@ -159,6 +115,10 @@ export default function SignUp() {
 
   const handleCategoria = (event) => {
     setCategoria(event.target.value);
+  };
+
+  const handleIva = (event) => {
+    setIva(event.target.value);
   };
 
   const handleLista = (event) => {
@@ -182,127 +142,44 @@ export default function SignUp() {
     //   // password: data.get('password'),
     // );
     let registro = {
-      name: `${data.get("firstName")} ${data.get("lastName")}`,
-      password: data.get("password"),
-      email: data.get("email"),
-      address: `${data.get("calle")} ${data.get("altura")}`,
-      provincia: data.get("provincia"),
-      localidad: data.get("localidad"),
-      phone: data.get("telefono"),
-      cuit: data.get("cuit"),
-      ferreteria: data.get("ferreteria"),
+      name: `${data.get("name")}`,
+      code: data.get("code"),
+      price: data.get("price"),
+      iva: `${data.get("iva")}`,
+      description: data.get("description"),
+      label: data.get("label"),
+      image: data.get("image"),
+      linea: data.get("linea"),
+      contenido: data.get("contenido"),
+      presentacion: data.get("presentacion"),
+      color: data.get("color"),
+      origin: data.get("origin"),
+      pricepack: data.get("pricepack"),
+      usd: data.get("usd"),
+      pvpusd: data.get("pvpusd"),
+      unidades: data.get("unidades"),
+      lista: data.get("lista"),
     };
-    // set configurations
-    const configuration = {
-      method: "post",
-      // url: `${config.SERVER}/register`,
-      url: `${config.SERVER}/register`,
-      data: registro,
-    };
-
-    // make the API call
-    axios(configuration)
-      .then((result) => {
-        navigate(`/`, { replace: true });
+    console.log(registro);
+    console.log(data);
+    // return
+    console.log(`apiquery0`);
+    apiQuery
+      .postFormData(`/api/products/`, data)
+      .then((respuesta) => {
+        console.log(respuesta);
+        console.log(`apiquery22`);
       })
       .catch((error) => {
         error = new Error();
       });
   };
 
-  function handleFirstName(e) {
-    let firstName = e.target.value;
-    if (isBetween(firstName.length, 3, 15)) {
-      setNombre(firstName);
-    } else {
-      setNombre("");
-    }
-  }
 
-  function handleLastName(e) {
-    let lastName = e.target.value;
-    if (isBetween(lastName.length, 3, 15)) {
-      setApellido(lastName);
-    } else {
-      setApellido("");
-    }
-  }
-
-  function handleEmail(e) {
-    let email = e.target.value;
-    if (isEmailValid(email)) {
-      setCorreo(email);
-    } else {
-      setCorreo("");
-    }
-  }
-
-  function handlePassword(e) {
-    let password = e.target.value;
-    if (isPasswordSecure(password)) {
-      setPassword(password);
-    } else {
-      setPassword("");
-    }
-  }
-
-  function handleRepeatPassword(e) {
-    let password = e.target.value;
-    setRepeatPassword(password);
-  }
-
-  const handleProvincia = (event) => {
-    setProvincia(event.target.value);
-  };
-
-  const handleLocalidad = (event) => {
-    setLocalidad(event.target.value);
-  };
-
-  const handlePhone = (e) => {
-    let telefono = e.target.value;
-    if (isNumber(telefono, 10)) {
-      setTelefono(telefono);
-    } else {
-      setTelefono("");
-    }
-  };
-
-  const handleCuit = (event) => {
-    let cuit = event.target.value;
-    if (isNumber(cuit, 11)) {
-      setCuit(cuit);
-    } else {
-      setCuit("");
-    }
-  };
-
-  const handleFerreteria = (event) => {
-    let ferreteria = event.target.value;
-    if (isBetween(ferreteria.length, 3, 30)) {
-      setFerreteria(ferreteria);
-    } else {
-      setFerreteria("");
-    }
-  };
-
-  const handleCalle = (event) => {
-    let calle = event.target.value;
-    if (isBetween(calle.length, 3, 30)) {
-      setCalle(calle);
-    } else {
-      setCalle("");
-    }
-  };
-
-  const handleAltura = (event) => {
-    let altura = event.target.value;
-    if (isBetween(altura.length, 1, 30)) {
-      setAltura(altura);
-    } else {
-      setAltura("");
-    }
-  };
+  // const handleKey = (event) => {
+  //   console.log(event.target.value);
+  //   console.log(event.target.name);
+  // };
 
   React.useEffect(() => {
     if (
@@ -416,7 +293,7 @@ export default function SignUp() {
         </Typography>
         <Box
           component="form"
-          noValidate
+          // noValidate
           onSubmit={handleSubmit}
           sx={{ mt: 3, width: "100%" }}
         >
@@ -427,13 +304,14 @@ export default function SignUp() {
                   Lista
                 </InputLabel>
                 <Select
+                  required
                   fullWidth
                   labelId="demo-simple-select-outlined-label"
                   id="demo-simple-select-outlined"
                   value={lista}
                   onChange={handleLista}
                   label="Lista"
-                  name="Lista"
+                  name="lista"
                   sx={{ width: "100%" }}
                 >
                   <MenuItem value="">
@@ -441,10 +319,10 @@ export default function SignUp() {
                   </MenuItem>
                   {brand
                     .sort(function (a, b) {
-                      if (a.iso_nombre > b.iso_nombre) {
+                      if (a > b) {
                         return 1;
                       }
-                      if (a.iso_nombre < b.iso_nombre) {
+                      if (a < b) {
                         return -1;
                       }
                       // a must be equal to b
@@ -466,6 +344,41 @@ export default function SignUp() {
                 {(() => {
                   let columnas = [];
                   for (const key of campos(lista)) {
+                    if (key == "iva") {
+                      columnas.push(
+                        <Grid
+                          key={key}
+                          item
+                          md={key == "name" || key == "code" ? 12 : 6}
+                          xs={12}
+                        >
+                          <FormControl
+                            variant="outlined"
+                            sx={{ width: "100%" }}
+                          >
+                            <InputLabel id="demo-simple-select-outlined-label">
+                              IVA *
+                            </InputLabel>
+                            <Select
+                              required
+                              fullWidth
+                              labelId="demo-simple-select-outlined-label"
+                              id="demo-simple-select-outlined"
+                              value={iva}
+                              onChange={handleIva}
+                              label="iva"
+                              name="iva"
+                              sx={{ width: "100%" }}
+                            >
+                              <MenuItem value="21">21</MenuItem>
+                              <MenuItem value="10.5">10.5</MenuItem>
+                            </Select>
+                          </FormControl>
+                        </Grid>
+                      );
+
+                      continue;
+                    }
                     columnas.push(
                       <Grid
                         key={key}
@@ -474,15 +387,15 @@ export default function SignUp() {
                         xs={12}
                       >
                         <TextField
-                          // required
+                          required={key == "description" ? false : true}
                           fullWidth
                           // disabled={key=="_id"}
                           name={key}
                           label={traductor(key)}
-                          // type="password"
+                          type={(["code","price","usd","pvpusd","unidades","pricepack"].includes(key)) ? "number" : "text" }
                           id={key}
                           // autoComplete="new-password"
-                          // onChange={handlePassword}
+                          // onChange={handleKey}
                           // value={element}
                           // placeholder={`${element}`}
                         />
@@ -495,9 +408,10 @@ export default function SignUp() {
                       <Grid item xs={12}>
                         <FormControl variant="outlined" sx={{ width: "100%" }}>
                           <InputLabel id="demo-simple-select-outlined-label">
-                            Categoria
+                            Categoria *
                           </InputLabel>
                           <Select
+                            required
                             fullWidth
                             labelId="demo-simple-select-outlined-label"
                             id="demo-simple-select-outlined"
@@ -512,10 +426,10 @@ export default function SignUp() {
                             </MenuItem>
                             {navList
                               .sort(function (a, b) {
-                                if (a.iso_nombre > b.iso_nombre) {
+                                if (a > b) {
                                   return 1;
                                 }
-                                if (a.iso_nombre < b.iso_nombre) {
+                                if (a < b) {
                                   return -1;
                                 }
                                 // a must be equal to b
@@ -543,7 +457,7 @@ export default function SignUp() {
             fullWidth
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
-            disabled={botonSubmit}
+            // disabled={botonSubmit}
           >
             Agregar
           </Button>

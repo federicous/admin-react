@@ -29,22 +29,43 @@ class ApiQuery {
     try {
       const configuration = {
         method: "post",
-        url: url,
+        url: `${config.SERVER}${url}`,
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data',
+        },
+        withCredentials: true,
         data: data,
       };
 
       let result = await axios(configuration)
-      cookies.set("token", result.data.token, {
-          path: "/",
-        });
-        // redirect user to the auth page
-        window.location.href = "/";
+      return (result.data);
 
     } catch (error) {
         console.log(error);
     }
   }
 
+  async postFormData(url, data){
+    try {
+      const configuration = {
+        method: "post",
+        url: `${config.SERVER}${url}`,
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data',
+        },
+        withCredentials: true,
+        data: data,
+      };
+
+      let result = await axios(configuration)
+      return (result.data);
+
+    } catch (error) {
+        console.log(error);
+    }
+  }
 
 }
 
