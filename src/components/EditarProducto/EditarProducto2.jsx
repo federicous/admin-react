@@ -11,36 +11,30 @@ import {
   MenuItem,
   InputLabel,
   FormControl,
+  Stack,
 } from "@mui/material";
 import { Link } from "react-router-dom";
-import { localidades } from "../utils/localidades";
+import { useParams } from "react-router";
 import ApiQuery from "../utils/apiQuery/apiQuery";
 import FileInput from "../FileInput/FileInput";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from '@mui/icons-material/Edit';
 
 let apiQuery = new ApiQuery();
 
-let sitecnia = "//SITECNIA"
-function Copyright(props) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {"Desarrollado por "}
-      <Link to={`/home`} color="inherit">
-        {sitecnia}
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
-
-let tekbondCampos = ["code", "linea", "contenido", "presentacion", "color", "unidades", "usd", "pvpusd", "iva",];
-let bremenCampos = ["name", "code", "price", "iva", "origin", "description"];
-let kantonCampos = ["name", "code", "price", "iva", "pricepack", "description"];
+let tekbondCampos = [
+  "code",
+  "linea",
+  "contenido",
+  "presentacion",
+  "color",
+  "unidades",
+  "usd",
+  "pvpusd",
+  "iva",
+];
+let bremenCampos = ["code", "name", "price", "iva", "origin", "description"];
+let kantonCampos = ["code", "name", "price", "iva", "pricepack", "description"];
 
 const campos = (lista) => {
   if (lista == "tekbond") {
@@ -58,28 +52,15 @@ function capitalizeFirstLetter(string) {
 }
 
 export default function AddProduct() {
+  const { id } = useParams();
   const [isAdmin, setIsAdmin] = useState(false);
-  const [provincia, setProvincia] = React.useState("");
-  const [localidadArray, setLocalidadArray] = React.useState([]);
-  const [localidad, setLocalidad] = React.useState("");
-  const [nombre, setNombre] = React.useState("");
-  const [apellido, setApellido] = React.useState("");
-  const [correo, setCorreo] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const [repeatPassword, setRepeatPassword] = React.useState("");
-  const [calle, setCalle] = React.useState("");
-  const [altura, setAltura] = React.useState("");
-  const [cuit, setCuit] = React.useState("");
-  const [ferreteria, setFerreteria] = React.useState("");
-  const [telefono, setTelefono] = React.useState("");
-  const [botonSubmit, setBotonSubmit] = React.useState(true);
-  const [passwordError, setPasswordError] = React.useState(false);
-  const [producto, setProducto] = useState({});
   const [navList, setNavList] = React.useState([]);
   const [brand, setBrand] = React.useState([]);
   const [categoria, setCategoria] = useState("");
   const [lista, setLista] = useState("");
   const [iva, setIva] = useState("");
+  const [producto, setProducto] = useState({});
+  const [camposObject, setCamposObject] = useState({})
 
   useEffect(() => {
     let cancel = false;
@@ -113,6 +94,33 @@ export default function AddProduct() {
     };
   }, []);
 
+  useEffect(() => {
+    let cancel = false;
+    apiQuery
+      .get(`/api/product/${id}`)
+      .then((respuesta) => {
+        if (cancel) return;
+        setProducto(respuesta);
+        setLista(respuesta.lista);
+        apiQuery
+          .get(`/api/categorias/${respuesta.lista}/label`)
+          .then((respuesta) => {
+            console.log(respuesta);
+            if (cancel) return;
+            setNavList([...respuesta]);
+          })
+          .catch((error) => {
+            error = new Error();
+          });
+      })
+      .catch((error) => {
+        error = new Error();
+      });
+    return () => {
+      cancel = true;
+    };
+  }, []);
+
   const handleCategoria = (event) => {
     setCategoria(event.target.value);
   };
@@ -124,15 +132,6 @@ export default function AddProduct() {
   const handleLista = (event) => {
     setLista(event.target.value);
   };
-
-  React.useEffect(() => {
-    let array = localidades.filter((item) =>
-      item.provincia.nombre.match(new RegExp(`${provincia}`, "gi"))
-    );
-    let uniq = [...new Set(array)];
-    setLocalidadArray(uniq);
-    // console.log(localidades.filter((item)=> item.provincia.nombre.match(new RegExp(`${provincia}`,'gi'))));
-  }, [provincia]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -165,7 +164,7 @@ export default function AddProduct() {
     // return
     console.log(`apiquery0`);
     apiQuery
-      .postFormData(`/api/products/`, data)
+      .putFormData(`/api/products/`, data)
       .then((respuesta) => {
         console.log(respuesta);
         console.log(`apiquery22`);
@@ -175,72 +174,15 @@ export default function AddProduct() {
       });
   };
 
-
-  // const handleKey = (event) => {
-  //   console.log(event.target.value);
-  //   console.log(event.target.name);
-  // };
-
-  React.useEffect(() => {
-    if (
-      nombre &&
-      apellido &&
-      correo &&
-      password &&
-      repeatPassword &&
-      calle &&
-      altura &&
-      cuit &&
-      ferreteria &&
-      telefono &&
-      provincia &&
-      localidad
-    ) {
-      setBotonSubmit(false);
-    } else {
-      setBotonSubmit(true);
-    }
-  }, [
-    nombre,
-    apellido,
-    correo,
-    password,
-    repeatPassword,
-    calle,
-    altura,
-    cuit,
-    ferreteria,
-    telefono,
-    provincia,
-    localidad,
-  ]);
-
-  React.useEffect(() => {
-    if (repeatPassword && password != repeatPassword) {
-      setPasswordError(true);
-    } else {
-      setPasswordError(false);
-    }
-  }, [password, repeatPassword]);
-
-  const isEmailValid = (email) => {
-    const re =
-      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(email);
-  };
-
-  const isBetween = (length, min, max) =>
-    length < min || length > max ? false : true;
-
-  const isPasswordSecure = (password) => {
-    // const re = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
-    const re = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})");
-    return re.test(password);
-  };
-
-  const isNumber = (number, min) => {
-    const re = new RegExp(`^[0-9]{${min},}$`);
-    return re.test(number);
+  const handleKey = (event) => {
+    console.log(event.target.value);
+    console.log(event.target.name);
+	let valorCampo = event.target.value;
+	let nombreCampo = event.target.name
+	let nuevoCampoObject = {...camposObject}
+	nuevoCampoObject[nombreCampo]=valorCampo;
+    setCamposObject({...nuevoCampoObject})
+    console.log(nuevoCampoObject);
   };
 
   const traductor = (palabra) => {
@@ -289,7 +231,7 @@ export default function AddProduct() {
         }}
       >
         <Typography component="h1" variant="h5">
-          Agregar producto
+          Editar producto
         </Typography>
         <Box
           component="form"
@@ -301,10 +243,10 @@ export default function AddProduct() {
             <Grid item xs={12}>
               <FormControl variant="outlined" sx={{ width: "100%" }}>
                 <InputLabel id="demo-simple-select-outlined-label">
-                  Lista *
+                  Lista
                 </InputLabel>
                 <Select
-                  required
+                //   required
                   fullWidth
                   labelId="demo-simple-select-outlined-label"
                   id="demo-simple-select-outlined"
@@ -313,6 +255,9 @@ export default function AddProduct() {
                   label={traductor("lista")}
                   name="lista"
                   sx={{ width: "100%" }}
+		  InputProps={{
+		    readOnly: true,
+		  }}
                 >
                   <MenuItem value="">
                     <em>None</em>
@@ -364,7 +309,7 @@ export default function AddProduct() {
                               fullWidth
                               labelId="demo-simple-select-outlined-label"
                               id="demo-simple-select-outlined"
-                              value={iva}
+                              value={iva ? iva : producto.iva}
                               onChange={handleIva}
                               label="iva"
                               name="iva"
@@ -387,16 +332,34 @@ export default function AddProduct() {
                         xs={12}
                       >
                         <TextField
-                          required={key == "description" ? false : true}
+                          required={
+                            ["code","description", "unidades", "contenido"].includes(
+                              key
+                            )
+                              ? false
+                              : true
+                          }
                           fullWidth
-                          // disabled={key=="_id"}
+                        //   disabled={["code"].includes(key) ? true : false}
+			  InputProps={{readOnly: ["code"].includes(key) ? true : false,}}
                           name={key}
                           label={traductor(key)}
-                          type={(["code","price","usd","pvpusd","unidades","pricepack"].includes(key)) ? "number" : "text" }
+                          type={
+                            [
+                              "code",
+                              "price",
+                              "usd",
+                              "pvpusd",
+                              "unidades",
+                              "pricepack",
+                            ].includes(key)
+                              ? "number"
+                              : "text"
+                          }
                           id={key}
                           // autoComplete="new-password"
-                          // onChange={handleKey}
-                          // value={element}
+                          onChange={handleKey}
+                          value={camposObject[key] ? camposObject[key] : producto[key]}
                           // placeholder={`${element}`}
                         />
                       </Grid>
@@ -415,7 +378,7 @@ export default function AddProduct() {
                             fullWidth
                             labelId="demo-simple-select-outlined-label"
                             id="demo-simple-select-outlined"
-                            value={categoria}
+                            value={categoria ? categoria : producto.label}
                             onChange={handleCategoria}
                             label="Categoría"
                             name="label"
@@ -452,15 +415,28 @@ export default function AddProduct() {
               </>
             )}
           </Grid>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-            // disabled={botonSubmit}
-          >
-            Agregar
-          </Button>
+          <Stack direction="row" spacing={2} sx={{ mt: 3, mb: 2 }}>
+            <Button
+              startIcon={<DeleteIcon />}
+              color="error"
+              type="submit"
+              fullWidth
+              variant="contained"
+              // disabled={botonSubmit}
+            >
+              Eliminar
+            </Button>
+            <Button
+              startIcon={<EditIcon />}
+              type="submit"
+              fullWidth
+              variant="contained"
+              // disabled={botonSubmit}
+            >
+              Aplicar
+            </Button>
+          </Stack>
+
           <Grid container justifyContent="center">
             <Grid item>
               {/* <Link style={{ color: "inherit", display: "flex", flexDirection: "row", alignItems: "center",}}
@@ -471,7 +447,6 @@ export default function AddProduct() {
           </Grid>
         </Box>
       </Box>
-      <Copyright sx={{ my: 4 }} />
     </Container>
     // </ThemeProvider>
   );

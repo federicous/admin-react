@@ -67,6 +67,27 @@ class ApiQuery {
     }
   }
 
+  async putFormData(url, data){
+    try {
+      const configuration = {
+        method: "put",
+        url: `${config.SERVER}${url}`,
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data',
+        },
+        withCredentials: true,
+        data: data,
+      };
+
+      let result = await axios(configuration)
+      return (result.data);
+
+    } catch (error) {
+        console.log(error);
+    }
+  }
+
 }
 
 
