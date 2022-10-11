@@ -88,6 +88,25 @@ class ApiQuery {
     }
   }
 
+
+  async delete(url){
+    try {
+      const configuration = {
+        method: "delete",
+        url: `${config.SERVER}${url}`,
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+        withCredentials: true,
+      };
+
+      let result = await axios(configuration)
+      return (result.data);
+
+    } catch (error) {
+        console.log(error);
+    }
+  }
 }
 
 

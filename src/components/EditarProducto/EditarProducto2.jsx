@@ -18,11 +18,12 @@ import { useParams } from "react-router";
 import ApiQuery from "../utils/apiQuery/apiQuery";
 import FileInput from "../FileInput/FileInput";
 import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from '@mui/icons-material/Edit';
+import EditIcon from "@mui/icons-material/Edit";
 
 let apiQuery = new ApiQuery();
 
 let tekbondCampos = [
+  "lista",
   "code",
   "linea",
   "contenido",
@@ -33,8 +34,24 @@ let tekbondCampos = [
   "pvpusd",
   "iva",
 ];
-let bremenCampos = ["code", "name", "price", "iva", "origin", "description"];
-let kantonCampos = ["code", "name", "price", "iva", "pricepack", "description"];
+let bremenCampos = [
+  "lista",
+  "code",
+  "name",
+  "price",
+  "iva",
+  "origin",
+  "description",
+];
+let kantonCampos = [
+  "lista",
+  "code",
+  "name",
+  "price",
+  "iva",
+  "pricepack",
+  "description",
+];
 
 const campos = (lista) => {
   if (lista == "tekbond") {
@@ -60,7 +77,7 @@ export default function AddProduct() {
   const [lista, setLista] = useState("");
   const [iva, setIva] = useState("");
   const [producto, setProducto] = useState({});
-  const [camposObject, setCamposObject] = useState({})
+  const [camposObject, setCamposObject] = useState({});
 
   useEffect(() => {
     let cancel = false;
@@ -177,12 +194,25 @@ export default function AddProduct() {
   const handleKey = (event) => {
     console.log(event.target.value);
     console.log(event.target.name);
-	let valorCampo = event.target.value;
-	let nombreCampo = event.target.name
-	let nuevoCampoObject = {...camposObject}
-	nuevoCampoObject[nombreCampo]=valorCampo;
-    setCamposObject({...nuevoCampoObject})
+    let valorCampo = event.target.value;
+    let nombreCampo = event.target.name;
+    let nuevoCampoObject = { ...camposObject };
+    nuevoCampoObject[nombreCampo] = valorCampo;
+    setCamposObject({ ...nuevoCampoObject });
     console.log(nuevoCampoObject);
+  };
+
+  const handleDelete = () => {
+    console.log(`entro a delete`);
+    apiQuery
+      .delete(`/api/products/${producto._id ? producto._id : producto.id}`)
+      .then((respuesta) => {
+        console.log(respuesta);
+        console.log(`apiqueryDelete`);
+      })
+      .catch((error) => {
+        error = new Error();
+      });
   };
 
   const traductor = (palabra) => {
@@ -240,13 +270,13 @@ export default function AddProduct() {
           sx={{ mt: 3, width: "100%" }}
         >
           <Grid container spacing={2}>
-            <Grid item xs={12}>
+            {/* <Grid item xs={12}>
               <FormControl variant="outlined" sx={{ width: "100%" }}>
                 <InputLabel id="demo-simple-select-outlined-label">
                   Lista
                 </InputLabel>
                 <Select
-                //   required
+                  //   required
                   fullWidth
                   labelId="demo-simple-select-outlined-label"
                   id="demo-simple-select-outlined"
@@ -255,9 +285,9 @@ export default function AddProduct() {
                   label={traductor("lista")}
                   name="lista"
                   sx={{ width: "100%" }}
-		  InputProps={{
-		    readOnly: true,
-		  }}
+                  InputProps={{
+                    readOnly: true,
+                  }}
                 >
                   <MenuItem value="">
                     <em>None</em>
@@ -280,7 +310,7 @@ export default function AddProduct() {
                     ))}
                 </Select>
               </FormControl>
-            </Grid>
+            </Grid> */}
 
             {!lista.length ? (
               <></>
@@ -328,20 +358,26 @@ export default function AddProduct() {
                       <Grid
                         key={key}
                         item
-                        md={key == "name" || key == "code" ? 12 : 6}
+                        md={["name"].includes(key) ? 12 : 6}
                         xs={12}
                       >
                         <TextField
                           required={
-                            ["code","description", "unidades", "contenido"].includes(
-                              key
-                            )
+                            [
+                              "code",
+                              "description",
+                              "unidades",
+                              "contenido",
+                              "lista"
+                            ].includes(key)
                               ? false
                               : true
                           }
                           fullWidth
-                        //   disabled={["code"].includes(key) ? true : false}
-			  InputProps={{readOnly: ["code"].includes(key) ? true : false,}}
+                          //   disabled={["code"].includes(key) ? true : false}
+                          InputProps={{
+                            readOnly: ["code","lista"].includes(key) ? true : false,
+                          }}
                           name={key}
                           label={traductor(key)}
                           type={
@@ -357,9 +393,14 @@ export default function AddProduct() {
                               : "text"
                           }
                           id={key}
+                          variant={["code","lista"].includes(key) ? "filled" : "outlined"}
                           // autoComplete="new-password"
                           onChange={handleKey}
-                          value={camposObject[key] ? camposObject[key] : producto[key]}
+                          value={
+                            camposObject[key]
+                              ? camposObject[key]
+                              : producto[key]
+                          }
                           // placeholder={`${element}`}
                         />
                       </Grid>
@@ -419,9 +460,10 @@ export default function AddProduct() {
             <Button
               startIcon={<DeleteIcon />}
               color="error"
-              type="submit"
+              type="button"
               fullWidth
               variant="contained"
+              onClick={handleDelete}
               // disabled={botonSubmit}
             >
               Eliminar
@@ -431,7 +473,6 @@ export default function AddProduct() {
               type="submit"
               fullWidth
               variant="contained"
-              // disabled={botonSubmit}
             >
               Aplicar
             </Button>
