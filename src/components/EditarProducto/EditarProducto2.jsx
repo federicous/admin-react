@@ -79,37 +79,37 @@ export default function AddProduct() {
   const [producto, setProducto] = useState({});
   const [camposObject, setCamposObject] = useState({});
 
-  useEffect(() => {
-    let cancel = false;
-    apiQuery
-      .get(`/api/categorias/${lista}/label`)
-      .then((respuesta) => {
-        if (cancel) return;
-        setNavList([...respuesta]);
-      })
-      .catch((error) => {
-        error = new Error();
-      });
-    return () => {
-      cancel = true;
-    };
-  }, [lista]);
+  // useEffect(() => {
+  //   let cancel = false;
+  //   apiQuery
+  //     .get(`/api/categorias/${lista}/label`)
+  //     .then((respuesta) => {
+  //       if (cancel) return;
+  //       setNavList([...respuesta].filter(Boolean));
+  //     })
+  //     .catch((error) => {
+  //       error = new Error();
+  //     });
+  //   return () => {
+  //     cancel = true;
+  //   };
+  // }, [lista]);
 
-  useEffect(() => {
-    let cancel = false;
-    apiQuery
-      .get(`/api/categorias/lista`)
-      .then((respuesta) => {
-        if (cancel) return;
-        setBrand([...respuesta]);
-      })
-      .catch((error) => {
-        error = new Error();
-      });
-    return () => {
-      cancel = true;
-    };
-  }, []);
+  // useEffect(() => {
+  //   let cancel = false;
+  //   apiQuery
+  //     .get(`/api/categorias/lista`)
+  //     .then((respuesta) => {
+  //       if (cancel) return;
+  //       setBrand([...respuesta].filter(Boolean));
+  //     })
+  //     .catch((error) => {
+  //       error = new Error();
+  //     });
+  //   return () => {
+  //     cancel = true;
+  //   };
+  // }, []);
 
   useEffect(() => {
     let cancel = false;
@@ -124,7 +124,7 @@ export default function AddProduct() {
           .then((respuesta) => {
             console.log(respuesta);
             if (cancel) return;
-            setNavList([...respuesta]);
+            setNavList([...respuesta].filter(Boolean));
           })
           .catch((error) => {
             error = new Error();
@@ -153,38 +153,10 @@ export default function AddProduct() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    // console.log([...data.entries()]
-    //   // email: data.get('email'),
-    //   // password: data.get('password'),
-    // );
-    let registro = {
-      name: `${data.get("name")}`,
-      code: data.get("code"),
-      price: data.get("price"),
-      iva: `${data.get("iva")}`,
-      description: data.get("description"),
-      label: data.get("label"),
-      image: data.get("image"),
-      linea: data.get("linea"),
-      contenido: data.get("contenido"),
-      presentacion: data.get("presentacion"),
-      color: data.get("color"),
-      origin: data.get("origin"),
-      pricepack: data.get("pricepack"),
-      usd: data.get("usd"),
-      pvpusd: data.get("pvpusd"),
-      unidades: data.get("unidades"),
-      lista: data.get("lista"),
-    };
-    console.log(registro);
-    console.log(data);
-    // return
-    console.log(`apiquery0`);
     apiQuery
       .putFormData(`/api/products/`, data)
       .then((respuesta) => {
         console.log(respuesta);
-        console.log(`apiquery22`);
       })
       .catch((error) => {
         error = new Error();
@@ -192,8 +164,8 @@ export default function AddProduct() {
   };
 
   const handleKey = (event) => {
-    console.log(event.target.value);
-    console.log(event.target.name);
+    // console.log(event.target.value);
+    // console.log(event.target.name);
     let valorCampo = event.target.value;
     let nombreCampo = event.target.name;
     let nuevoCampoObject = { ...camposObject };
@@ -448,7 +420,7 @@ export default function AddProduct() {
                         </FormControl>
                       </Grid>
                       <Grid item xs={12}>
-                        <FileInput />
+                        <FileInput img={producto.image} />
                       </Grid>
                     </>
                   );
