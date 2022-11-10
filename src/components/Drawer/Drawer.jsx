@@ -29,9 +29,9 @@ import Collapse from "@mui/material/Collapse";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import AddIcon from "@mui/icons-material/Add";
-import EditIcon from '@mui/icons-material/Edit';
-import HandymanIcon from '@mui/icons-material/Handyman';
-import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import EditIcon from "@mui/icons-material/Edit";
+import HandymanIcon from "@mui/icons-material/Handyman";
+import AccountBoxIcon from "@mui/icons-material/AccountBox";
 
 import Productos from "../Productos/Productos";
 import Ordenes from "../Ordenes/Ordenes";
@@ -39,7 +39,8 @@ import Listas from "../Listas/Listas";
 import Usuarios from "../Usuarios/Usuarios";
 import EditarProducto from "../EditarProducto/EditarProducto2";
 import AddProduct from "../AddProduct/AddProduct";
-import Login from "../Login/Login"
+import Login from "../Login/Login";
+import ListAltIcon from '@mui/icons-material/ListAlt';
 // import ApiQuery from "../utils/apiQuery/apiQuery"
 // let apiQuery = new ApiQuery();
 
@@ -51,6 +52,7 @@ function ResponsiveDrawer(props) {
   // const [isAdmin, setIsAdmin] = useState(false)
   const [open, setOpen] = React.useState(false);
   const [openClientes, setOpenClientes] = React.useState(false);
+  const [openListas, setOpenListas] = React.useState(false);
 
   const handleClick = () => {
     setOpen(!open);
@@ -59,7 +61,11 @@ function ResponsiveDrawer(props) {
   const handleClickClientes = () => {
     setOpenClientes(!openClientes);
   };
-  
+
+  const handleClickListas = () => {
+    setOpenListas(!openListas);
+  };
+
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
@@ -77,6 +83,7 @@ function ResponsiveDrawer(props) {
       <Toolbar />
       <Divider />
       <List>
+        {/* PRODUCTOS #############################################*/}
         <ListItemButton onClick={handleClick}>
           <ListItemIcon>
             <HandymanIcon />
@@ -102,14 +109,43 @@ function ResponsiveDrawer(props) {
                 <ListItemIcon>
                   <EditIcon />
                 </ListItemIcon>
-                <ListItemText
-                  primary="Editar"
-                  sx={{ color: "text.primary" }}
-                />
+                <ListItemText primary="Editar" sx={{ color: "text.primary" }} />
               </ListItemButton>
             </Link>
           </List>
         </Collapse>
+        {/* LISTAS #############################################*/}
+        <ListItemButton onClick={handleClickListas}>
+          <ListItemIcon>
+            <ListAltIcon />
+          </ListItemIcon>
+          <ListItemText primary="Listas" />
+          {open ? <ExpandLess /> : <ExpandMore />}
+        </ListItemButton>
+        <Collapse in={openListas} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding>
+            <Link to="/listas" style={{ textDecoration: "none" }}>
+              <ListItemButton sx={{ pl: 4 }}>
+                <ListItemIcon>
+                  <AddIcon />
+                </ListItemIcon>
+                <ListItemText
+                  primary="Agregar"
+                  sx={{ color: "text.primary" }}
+                />
+              </ListItemButton>
+            </Link>
+            <Link to="/producto" style={{ textDecoration: "none" }}>
+              <ListItemButton sx={{ pl: 4 }}>
+                <ListItemIcon>
+                  <EditIcon />
+                </ListItemIcon>
+                <ListItemText primary="Editar" sx={{ color: "text.primary" }} />
+              </ListItemButton>
+            </Link>
+          </List>
+        </Collapse>
+        {/* CLIENTES #############################################*/}
         <ListItemButton onClick={handleClickClientes}>
           <ListItemIcon>
             <AccountBoxIcon />
@@ -135,10 +171,7 @@ function ResponsiveDrawer(props) {
                 <ListItemIcon>
                   <EditIcon />
                 </ListItemIcon>
-                <ListItemText
-                  primary="Editar"
-                  sx={{ color: "text.primary" }}
-                />
+                <ListItemText primary="Editar" sx={{ color: "text.primary" }} />
               </ListItemButton>
             </Link>
           </List>
@@ -218,7 +251,7 @@ function ResponsiveDrawer(props) {
         <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
           <Toolbar />
           <Routes>
-            <Route exact path="/"  element={<Login />}/>
+            <Route exact path="/" element={<Login />} />
             <Route exact path="/productos/" element={<Productos />} />
             <Route exact path="/productos/agregar/" element={<AddProduct />} />
             <Route exact path="/producto/:id" element={<EditarProducto />} />

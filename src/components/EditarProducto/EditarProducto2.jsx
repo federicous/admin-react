@@ -198,7 +198,7 @@ export default function AddProduct() {
       contenido: "Contenido",
       presentacion: "Presentacion",
       color: "Color",
-      unidades: "Unidades",
+      unidades: "Unidades x caja",
       usd: "Precio USD",
       pvpusd: "Precio Venta USD",
       reftekbond: "Referencia Tekbond",
