@@ -340,15 +340,15 @@ export default function AddProduct() {
             ) : (
               <>
                 {(() => {
-                  let columnas = [];
-                  for (const key of campos(lista)) {
-                    if (key == "iva") {
-
-
-                      continue;
-                    }
-
-                  }
+                  if (["bremen","kanton"].find(element => element==lista)) {
+                    return (
+                      <>
+                        <Grid item xs={12}>
+                          <FileInputList />
+                        </Grid>
+                      </>
+                    );
+                  } 
                   return (
                     <>
                       <Grid item xs={12}>

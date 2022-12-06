@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 // import Button from '@mui/icons-material/Button';
 import { Box, Button, CardMedia } from "@mui/material";
-import GetAppIcon from "@mui/icons-material/AddPhotoAlternate";
+import UploadFileIcon from '@mui/icons-material/UploadFile';
 import { config } from "../../config/config";
 
 const FileInput = ({ img }) => {
@@ -26,7 +26,7 @@ const FileInput = ({ img }) => {
       />
       <label htmlFor="select-image">
         <Button
-          startIcon={<GetAppIcon />}
+          startIcon={<UploadFileIcon />}
           variant="contained"
           color="primary"
           component="span"
