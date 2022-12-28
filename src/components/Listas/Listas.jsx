@@ -135,7 +135,7 @@ export default function AddProduct() {
   }, [provincia]);
 
   const handleSubmit = (event) => {
-    event.preventDefault();
+    // event.preventDefault();
     const data = new FormData(event.currentTarget);
     // console.log([...data.entries()]
     //   // email: data.get('email'),
@@ -168,6 +168,9 @@ export default function AddProduct() {
       .then((respuesta) => {
         console.log(respuesta);
       })
+      // .finally(()=>{
+      //   document.getElementById("formLista").reset()
+      // })
       .catch((error) => {
         error = new Error();
       });
@@ -294,6 +297,7 @@ export default function AddProduct() {
           // noValidate
           onSubmit={handleSubmit}
           sx={{ mt: 3, width: "100%" }}
+          id="formLista"
         >
           <Grid container spacing={2}>
             <Grid item xs={12}>
@@ -340,7 +344,7 @@ export default function AddProduct() {
             ) : (
               <>
                 {(() => {
-                  if (["bremen","kanton"].find(element => element==lista)) {
+                  if (["bremen","kanton","buloneria bremen"].find(element => element==lista)) {
                     return (
                       <>
                         <Grid item xs={12}>
