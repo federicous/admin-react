@@ -37,7 +37,7 @@ import Productos from "../Productos/Productos";
 import Ordenes from "../Ordenes/Ordenes";
 import Listas from "../Listas/Listas";
 import Usuarios from "../Usuarios/Usuarios";
-import EditarProducto from "../EditarProducto/EditarProducto2";
+import EditarProducto2 from "../EditarProducto/EditarProducto2";
 import AddProduct from "../AddProduct/AddProduct";
 import Login from "../Login/Login";
 import ListAltIcon from '@mui/icons-material/ListAlt';
@@ -254,7 +254,7 @@ function ResponsiveDrawer(props) {
             <Route exact path="/" element={<Login />} />
             <Route exact path="/productos/" element={<Productos />} />
             <Route exact path="/productos/agregar/" element={<AddProduct />} />
-            <Route exact path="/producto/:id" element={<EditarProducto />} />
+            <Route exact path="/producto/:id" element={<EditarProducto2 />} />
             <Route exact path="/ordenes" element={<Ordenes />} />
             <Route exact path="/listas" element={<Listas />} />
             <Route exact path="/usuarios" element={<Usuarios />} />

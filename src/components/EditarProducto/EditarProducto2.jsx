@@ -52,6 +52,18 @@ let kantonCampos = [
   "pricepack",
   "description",
 ];
+let buloneriaBremenCampos = [
+  "lista",
+  "code",
+  "name",
+  "price",
+  "iva",
+  "unidades",
+  "rosca",
+  "cabeza",
+  "punta",
+  // "terminacion",
+];
 
 const campos = (lista) => {
   if (lista == "tekbond") {
@@ -60,6 +72,8 @@ const campos = (lista) => {
     return bremenCampos;
   } else if (lista == "kanton") {
     return kantonCampos;
+  } else if (lista == "buloneria bremen") {
+    return buloneriaBremenCampos;
   }
 };
 
@@ -117,7 +131,9 @@ export default function AddProduct() {
       .get(`/api/product/${id}`)
       .then((respuesta) => {
         if (cancel) return;
+        // respuesta["iva"]=Number(respuesta["iva"].replace(/%/g,""))
         setProducto(respuesta);
+        console.log(respuesta);
         setLista(respuesta.lista);
         apiQuery
           .get(`/api/categorias/${respuesta.lista}/label`)
@@ -215,6 +231,10 @@ export default function AddProduct() {
       image: "Imagen",
       timestamp: "timestamp",
       uuid: "uuid",
+      rosca: "Rosca",
+    	cabeza: "Cabeza",
+    	punta: "Punta",
+    	terminacion: "Terminación",
       __v: "Version",
     };
     return Diccionario[palabra];
@@ -311,7 +331,13 @@ export default function AddProduct() {
                               fullWidth
                               labelId="demo-simple-select-outlined-label"
                               id="demo-simple-select-outlined"
-                              value={iva ? iva : producto.iva}
+                              // value={iva ? iva : producto.iva}
+                              value={
+                                camposObject[key]
+                                  ? camposObject[key]
+                                  : producto[key]
+                              }
+                              // value={"3"}
                               onChange={handleIva}
                               label="iva"
                               name="iva"
@@ -354,7 +380,7 @@ export default function AddProduct() {
                           label={traductor(key)}
                           type={
                             [
-                              "code",
+                              // "code",
                               "price",
                               "usd",
                               "pvpusd",
