@@ -16,6 +16,9 @@ import { Link } from "react-router-dom";
 import { localidades } from "../utils/localidades";
 import ApiQuery from "../utils/apiQuery/apiQuery";
 import FileInputList from "../FileInput/FileInputList";
+import TableUpload from "../Table/TableUpload"
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 
 let apiQuery = new ApiQuery();
 
@@ -80,6 +83,16 @@ export default function AddProduct() {
   const [categoria, setCategoria] = useState("");
   const [lista, setLista] = useState("");
   const [iva, setIva] = useState("");
+  const [resultado, setResultado] = useState({});
+  const [open, setOpen] = React.useState(false);
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const handleToggle = () => {
+    setOpen(!open);
+    setResultado({})
+  };
 
   useEffect(() => {
     let cancel = false;
@@ -135,7 +148,7 @@ export default function AddProduct() {
   }, [provincia]);
 
   const handleSubmit = (event) => {
-    // event.preventDefault();
+    event.preventDefault();
     const data = new FormData(event.currentTarget);
     // console.log([...data.entries()]
     //   // email: data.get('email'),
@@ -160,13 +173,11 @@ export default function AddProduct() {
       unidades: data.get("unidades"),
       lista: data.get("lista"),
     };
-    console.log(registro);
-    console.log(data);
-    // return
     apiQuery
       .postFormData(`/api/listas/subir`, data)
       .then((respuesta) => {
-        console.log(respuesta);
+        setResultado(respuesta)
+        handleClose()
       })
       // .finally(()=>{
       //   document.getElementById("formLista").reset()
@@ -408,15 +419,34 @@ export default function AddProduct() {
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
             // disabled={botonSubmit}
+            onClick={handleToggle}
           >
             Agregar
           </Button>
+          <Backdrop
+            sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+            open={open}
+            onClick={handleClose}
+          >
+            <CircularProgress color="inherit" />
+          </Backdrop>
           <Grid container justifyContent="center">
             <Grid item>
               {/* <Link style={{ color: "inherit", display: "flex", flexDirection: "row", alignItems: "center",}}
                  to={`/home`} >
                   Ya tiene una cuenta? Iniciar sesión
                 </Link> */}
+              {Object.keys(resultado).length === 0 ? (
+                ""
+              ) : (
+                <>
+                  <Typography sx={{ mt: 4 }}>
+                  Productos actualizados: {`${resultado.response.length}`}
+                  </Typography>
+                  <TableUpload products={resultado.response}/>
+                </>
+              )}
+
             </Grid>
           </Grid>
         </Box>
