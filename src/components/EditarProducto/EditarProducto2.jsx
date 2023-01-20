@@ -33,6 +33,8 @@ let tekbondCampos = [
   "usd",
   "pvpusd",
   "iva",
+  "oferta",
+  "precioOferta",
 ];
 let bremenCampos = [
   "lista",
@@ -42,6 +44,8 @@ let bremenCampos = [
   "iva",
   "origin",
   "description",
+  "oferta",
+  "precioOferta",
 ];
 let kantonCampos = [
   "lista",
@@ -51,6 +55,8 @@ let kantonCampos = [
   "iva",
   "pricepack",
   "description",
+  "oferta",
+  "precioOferta",
 ];
 let buloneriaBremenCampos = [
   "lista",
@@ -62,6 +68,8 @@ let buloneriaBremenCampos = [
   "rosca",
   "cabeza",
   "punta",
+  "oferta",
+  "precioOferta",
   // "terminacion",
 ];
 
@@ -235,6 +243,8 @@ export default function AddProduct() {
     	cabeza: "Cabeza",
     	punta: "Punta",
     	terminacion: "Terminación",
+    	oferta: "Oferta",
+    	precioOferta: "Precio Oferta",
       __v: "Version",
     };
     return Diccionario[palabra];
@@ -351,6 +361,45 @@ export default function AddProduct() {
                       );
 
                       continue;
+                    } else if (key == "oferta"){
+                      columnas.push(
+                      <Grid
+                      key={key}
+                      item
+                      md={key == "name" || key == "code" ? 12 : 6}
+                      xs={12}
+                    >
+                      <FormControl
+                        variant="outlined"
+                        sx={{ width: "100%" }}
+                      >
+                        <InputLabel id="demo-simple-select-outlined-label">
+                          Oferta
+                        </InputLabel>
+                        <Select
+                          required
+                          fullWidth
+                          labelId="demo-simple-select-outlined-label"
+                          id="demo-simple-select-outlined"
+                          // value={iva ? iva : producto.iva}
+                          value={
+                            camposObject[key]
+                              ? camposObject[key]
+                              : producto[key]
+                          }
+                          // value={"3"}
+                          onChange={handleIva}
+                          label="iva"
+                          name="iva"
+                          sx={{ width: "100%" }}
+                        >
+                          <MenuItem value="si">si</MenuItem>
+                          <MenuItem value="no">no</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Grid>
+                      );
+                      continue;
                     }
                     columnas.push(
                       <Grid
@@ -386,6 +435,7 @@ export default function AddProduct() {
                               "pvpusd",
                               "unidades",
                               "pricepack",
+                              "precioOferta",
                             ].includes(key)
                               ? "number"
                               : "text"
