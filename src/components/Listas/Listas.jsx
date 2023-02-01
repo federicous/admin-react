@@ -44,6 +44,7 @@ function Copyright(props) {
 let tekbondCampos = ["code", "linea", "contenido", "presentacion", "color", "unidades", "usd", "pvpusd", "iva",];
 let bremenCampos = ["name", "code", "price", "iva", "origin", "description"];
 let kantonCampos = ["name", "code", "price", "iva", "pricepack", "description"];
+let sinparCampos = ["name", "code", "price", "iva", "ofertaUno", "ofertaDos", "ventaMinima"];
 
 const campos = (lista) => {
   if (lista == "tekbond") {
@@ -52,6 +53,8 @@ const campos = (lista) => {
     return bremenCampos;
   } else if (lista == "kanton") {
     return kantonCampos;
+  } else if (lista == "sinpar"){
+    return sinparCampos;
   }
 };
 
@@ -100,7 +103,7 @@ export default function AddProduct() {
       .get(`/api/categorias/${lista}/label`)
       .then((respuesta) => {
         if (cancel) return;
-        setNavList([...respuesta]);
+        setNavList([...respuesta].filter(Boolean));
       })
       .catch((error) => {
         error = new Error();
@@ -281,6 +284,9 @@ export default function AddProduct() {
       pricepack: "Precio Pack",
       stock: "Stock",
       description: "Descripcion",
+      ofertaUno: "Oferta I",
+      ofertaDos: "Oferta II",
+      ventaMinima: "Venta minima",
       lista: "Lista",
       marca: "Marca",
       image: "Imagen",
@@ -355,7 +361,7 @@ export default function AddProduct() {
             ) : (
               <>
                 {(() => {
-                  if (["bremen","kanton","buloneria bremen"].find(element => element==lista)) {
+                  if (["bremen","kanton","buloneria bremen","sinpar"].find(element => element==lista)) {
                     return (
                       <>
                         <Grid item xs={12}>
@@ -382,9 +388,6 @@ export default function AddProduct() {
                             name="label"
                             sx={{ width: "100%" }}
                           >
-                            <MenuItem value="">
-                              <em>None</em>
-                            </MenuItem>
                             {navList
                               .sort(function (a, b) {
                                 if (a > b) {

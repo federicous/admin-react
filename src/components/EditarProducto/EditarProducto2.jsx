@@ -81,6 +81,7 @@ let buloneriaBremenCampos = [
   "precioOferta",
   // "terminacion",
 ];
+let sinparCampos = ["name", "code", "price", "iva", "ofertaUno", "ofertaDos", "ventaMinima"];
 
 const campos = (lista) => {
   if (lista == "tekbond") {
@@ -91,6 +92,8 @@ const campos = (lista) => {
     return kantonCampos;
   } else if (lista == "buloneria bremen") {
     return buloneriaBremenCampos;
+  } else if (lista == "sinpar"){
+    return sinparCampos;
   }
 };
 
@@ -245,6 +248,9 @@ export default function AddProduct() {
     	terminacion: "Terminación",
     	oferta: "Oferta",
     	precioOferta: "Precio Oferta",
+      ofertaUno: "Oferta I",
+      ofertaDos: "Oferta II",
+      ventaMinima: "Venta minima",
       __v: "Version",
     };
     return Diccionario[palabra];
