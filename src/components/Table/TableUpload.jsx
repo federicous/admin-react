@@ -43,7 +43,7 @@ export default function DenseTable({products}) {
         <TableBody>
           {products.map((item) => (
             <TableRow
-              key={item.code}
+              key={item._id ? item._id : item.name }
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               <TableCell component="th" scope="row">

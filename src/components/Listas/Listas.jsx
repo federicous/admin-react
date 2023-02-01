@@ -176,6 +176,9 @@ export default function AddProduct() {
     apiQuery
       .postFormData(`/api/listas/subir`, data)
       .then((respuesta) => {
+        // console.log(respuesta);
+        // console.log(respuesta.result);
+        // console.log(respuesta.response);
         setResultado(respuesta)
         handleClose()
       })
@@ -327,9 +330,6 @@ export default function AddProduct() {
                   name="lista"
                   sx={{ width: "100%" }}
                 >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
                   {brand
                     .sort(function (a, b) {
                       if (a > b) {
@@ -436,7 +436,7 @@ export default function AddProduct() {
                  to={`/home`} >
                   Ya tiene una cuenta? Iniciar sesión
                 </Link> */}
-              {Object.keys(resultado).length === 0 ? (
+              {(Object.keys(resultado).length === 0 || (resultado.response.result=="error")) ? (
                 ""
               ) : (
                 <>
