@@ -40,7 +40,10 @@ import Usuarios from "../Usuarios/Usuarios";
 import EditarProducto2 from "../EditarProducto/EditarProducto2";
 import AddProduct from "../AddProduct/AddProduct";
 import Login from "../Login/Login";
+import Download from "../Download/Download"
 import ListAltIcon from '@mui/icons-material/ListAlt';
+import DownloadIcon from "@mui/icons-material/GetApp"
+import { GetApp } from "@mui/icons-material";
 // import ApiQuery from "../utils/apiQuery/apiQuery"
 // let apiQuery = new ApiQuery();
 
@@ -104,14 +107,14 @@ function ResponsiveDrawer(props) {
                 />
               </ListItemButton>
             </Link>
-            <Link to="/producto" style={{ textDecoration: "none" }}>
+            {/* <Link to="/producto" style={{ textDecoration: "none" }}>
               <ListItemButton sx={{ pl: 4 }}>
                 <ListItemIcon>
                   <EditIcon />
                 </ListItemIcon>
                 <ListItemText primary="Editar" sx={{ color: "text.primary" }} />
               </ListItemButton>
-            </Link>
+            </Link> */}
           </List>
         </Collapse>
         {/* LISTAS #############################################*/}
@@ -135,12 +138,12 @@ function ResponsiveDrawer(props) {
                 />
               </ListItemButton>
             </Link>
-            <Link to="/producto" style={{ textDecoration: "none" }}>
+            <Link to="/descargas" style={{ textDecoration: "none" }}>
               <ListItemButton sx={{ pl: 4 }}>
                 <ListItemIcon>
-                  <EditIcon />
+                  <GetApp />
                 </ListItemIcon>
-                <ListItemText primary="Editar" sx={{ color: "text.primary" }} />
+                <ListItemText primary="Descargas" sx={{ color: "text.primary" }} />
               </ListItemButton>
             </Link>
           </List>
@@ -258,6 +261,7 @@ function ResponsiveDrawer(props) {
             <Route exact path="/ordenes" element={<Ordenes />} />
             <Route exact path="/listas" element={<Listas />} />
             <Route exact path="/usuarios" element={<Usuarios />} />
+            <Route exact path="/descargas" element={<Download />} />
 
             {/* <Route exact path="/"  element={<Login />}/>
               <Route path="/" element={<ProtectedRoutes />}>

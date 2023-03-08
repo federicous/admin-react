@@ -41,6 +41,30 @@ function Copyright(props) {
 let tekbondCampos = ["code", "linea", "contenido", "presentacion", "color", "unidades", "usd", "pvpusd", "iva",];
 let bremenCampos = ["name", "code", "price", "iva", "origin", "description"];
 let kantonCampos = ["name", "code", "price", "iva", "pricepack", "description"];
+let buloneriaBremenCampos = [
+  "code",
+  "name",
+  "price",
+  "iva",
+  "unidades",
+  "rosca",
+  "cabeza",
+  "punta",
+  "oferta",
+  "precioOferta",
+  // "terminacion",
+];
+let sinparCampos = [
+  "name",
+  "code",
+  "price",
+  "iva",
+  "ofertaUno",
+  "ofertaDos",
+  "ventaMinima",
+  "oferta",
+  "precioOferta",
+];
 
 const campos = (lista) => {
   if (lista == "tekbond") {
@@ -49,6 +73,10 @@ const campos = (lista) => {
     return bremenCampos;
   } else if (lista == "kanton") {
     return kantonCampos;
+  } else if (lista == "buloneria bremen") {
+    return buloneriaBremenCampos;
+  } else if (lista == "sinpar") {
+    return sinparCampos;
   }
 };
 
@@ -87,7 +115,7 @@ export default function AddProduct() {
       .get(`/api/categorias/${lista}/label`)
       .then((respuesta) => {
         if (cancel) return;
-        setNavList([...respuesta]);
+        setNavList([...respuesta].filter(Boolean));
       })
       .catch((error) => {
         error = new Error();
@@ -103,7 +131,7 @@ export default function AddProduct() {
       .get(`/api/categorias/lista`)
       .then((respuesta) => {
         if (cancel) return;
-        setBrand([...respuesta]);
+        setBrand([...respuesta].filter(Boolean));
       })
       .catch((error) => {
         error = new Error();
@@ -268,7 +296,15 @@ export default function AddProduct() {
       description: "Descripcion",
       lista: "Lista",
       marca: "Marca",
-      image: "Imagen",
+      image: "Imagen",  
+      rosca: "Rosca",
+      cabeza: "Cabeza",
+      punta: "Punta",    
+      oferta: "Oferta",
+      precioOferta: "Precio Oferta",
+      ofertaUno: "Oferta I",
+      ofertaDos: "Oferta II",
+      ventaMinima: "Venta minima",
       timestamp: "timestamp",
       uuid: "uuid",
       __v: "Version",
@@ -387,7 +423,22 @@ export default function AddProduct() {
                         xs={12}
                       >
                         <TextField
-                          required={key == "description" ? false : true}
+                          required={
+                            [
+                              "code",
+                              "description",
+                              "unidades",
+                              "contenido",
+                              "lista",
+                              "precioOferta",  
+                              "ofertaUno",
+                              "ofertaDos",
+                              "oferta",
+                              "ventaMinima",
+                            ].includes(key)
+                              ? false
+                              : true
+                            }
                           fullWidth
                           // disabled={key=="_id"}
                           name={key}

@@ -22,8 +22,8 @@ import EditIcon from "@mui/icons-material/Edit";
 // import AlertUpdateModal from "../Alert/AlertUpdateModal"
 // import Stack from '@mui/material/Stack';
 // import Button from '@mui/material/Button';
-import Snackbar from '@mui/material/Snackbar';
-import MuiAlert from '@mui/material/Alert';
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 
 let apiQuery = new ApiQuery();
 
@@ -81,7 +81,18 @@ let buloneriaBremenCampos = [
   "precioOferta",
   // "terminacion",
 ];
-let sinparCampos = ["name", "code", "price", "iva", "ofertaUno", "ofertaDos", "ventaMinima"];
+let sinparCampos = [
+  "name",
+  "lista",
+  "code",
+  "price",
+  "iva",
+  "ofertaUno",
+  "ofertaDos",
+  "ventaMinima",
+  "oferta",
+  "precioOferta",
+];
 
 const campos = (lista) => {
   if (lista == "tekbond") {
@@ -92,7 +103,7 @@ const campos = (lista) => {
     return kantonCampos;
   } else if (lista == "buloneria bremen") {
     return buloneriaBremenCampos;
-  } else if (lista == "sinpar"){
+  } else if (lista == "sinpar") {
     return sinparCampos;
   }
 };
@@ -121,7 +132,7 @@ export default function AddProduct() {
   };
 
   const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
+    if (reason === "clickaway") {
       return;
     }
     setOpen(false);
@@ -135,7 +146,7 @@ export default function AddProduct() {
         if (cancel) return;
         // respuesta["iva"]=Number(respuesta["iva"].replace(/%/g,""))
         setProducto(respuesta);
-        setCamposObject(respuesta)
+        setCamposObject(respuesta);
         console.log(respuesta);
         setLista(respuesta.lista);
         apiQuery
@@ -179,10 +190,10 @@ export default function AddProduct() {
     apiQuery
       .putFormData(`/api/products/`, data)
       .then((respuesta) => {
-        console.log(respuesta);
-        setResultUpdate(respuesta)
-        if (respuesta.result=='ok') {
-            setOpen(true);
+        // console.log(respuesta);
+        setResultUpdate(respuesta);
+        if (respuesta.result == "ok") {
+          setOpen(true);
         }
       })
       .catch((error) => {
@@ -198,7 +209,7 @@ export default function AddProduct() {
     let nuevoCampoObject = { ...camposObject };
     nuevoCampoObject[nombreCampo] = valorCampo;
     setCamposObject({ ...nuevoCampoObject });
-    console.log(nuevoCampoObject);
+    // console.log(nuevoCampoObject);
   };
 
   const handleDelete = () => {
@@ -243,11 +254,11 @@ export default function AddProduct() {
       timestamp: "timestamp",
       uuid: "uuid",
       rosca: "Rosca",
-    	cabeza: "Cabeza",
-    	punta: "Punta",
-    	terminacion: "Terminación",
-    	oferta: "Oferta",
-    	precioOferta: "Precio Oferta",
+      cabeza: "Cabeza",
+      punta: "Punta",
+      terminacion: "Terminación",
+      oferta: "Oferta",
+      precioOferta: "Precio Oferta",
       ofertaUno: "Oferta I",
       ofertaDos: "Oferta II",
       ventaMinima: "Venta minima",
@@ -268,250 +279,262 @@ export default function AddProduct() {
           alignItems: "center",
         }}
       >
+        {/* <AlertUpdateModal mostrar={open}/> */}
 
-          {/* <AlertUpdateModal mostrar={open}/> */}
-      
-          <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-          Elemento actualizado!
-        </Alert>
-      </Snackbar>
-
-          <Typography component="h1" variant="h5">
-            Editar producto
-          </Typography>
-          <Box
-            component="form"
-            // noValidate
-            onSubmit={handleSubmit}
-            sx={{ mt: 3, width: "100%" }}
+        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+          <Alert
+            onClose={handleClose}
+            severity="success"
+            sx={{ width: "100%" }}
           >
-            <Grid container spacing={2}>
+            Elemento actualizado!
+          </Alert>
+        </Snackbar>
 
-              {!lista.length ? (
-                <></>
-              ) : (
-                <>
-                  {(() => {
-                    let columnas = [];
-                    for (const key of campos(lista)) {
-                      if (key == "iva") {
-                        columnas.push(
-                          <Grid
-                            key={key}
-                            item
-                            md={key == "name" || key == "code" ? 12 : 6}
-                            xs={12}
-                          >
-                            <FormControl
-                              variant="outlined"
-                              sx={{ width: "100%" }}
-                            >
-                              <InputLabel id="demo-simple-select-outlined-label">
-                                IVA *
-                              </InputLabel>
-                              <Select
-                                required
-                                fullWidth
-                                labelId="demo-simple-select-outlined-label"
-                                id="demo-simple-select-outlined"
-                                // value={iva ? iva : producto.iva}
-                                value={
-                                  camposObject[key]
-                                    // ? camposObject[key]
-                                    // : producto[key]
-                                }
-                                // value={"3"}
-                                // onChange={handleIva}
-                                onChange={handleKey}
-                                label="iva"
-                                name="iva"
-                                sx={{ width: "100%" }}
-                              >
-                                <MenuItem value="21">21</MenuItem>
-                                <MenuItem value="10.5">10.5</MenuItem>
-                              </Select>
-                            </FormControl>
-                          </Grid>
-                        );
-
-                        continue;
-                      } else if (key == "oferta"){
-                        columnas.push(
-                        <Grid
-                        key={key}
-                        item
-                        md={key == "name" || key == "code" ? 12 : 6}
-                        xs={12}
-                      >
-                        <FormControl
-                          variant="outlined"
-                          sx={{ width: "100%" }}
-                        >
-                          <InputLabel id="demo-simple-select-outlined-label">
-                            Oferta
-                          </InputLabel>
-                          <Select
-                            required
-                            fullWidth
-                            labelId="demo-simple-select-outlined-label"
-                            id="demo-simple-select-outlined"
-                            // value={iva ? iva : producto.iva}
-                            value={
-                              camposObject[key]
-                                // ? camposObject[key]
-                                // : producto[key]
-                            }
-                            // value={"3"}
-                            // onChange={handleOferta}
-                            onChange={handleKey}
-                            label="oferta"
-                            name="oferta"
-                            sx={{ width: "100%" }}
-                          >
-                            <MenuItem value="si">si</MenuItem>
-                            <MenuItem value="no">no</MenuItem>
-                          </Select>
-                        </FormControl>
-                      </Grid>
-                        );
-                        continue;
-                      }
+        <Typography component="h1" variant="h5">
+          Editar producto
+        </Typography>
+        <Box
+          component="form"
+          // noValidate
+          onSubmit={handleSubmit}
+          sx={{ mt: 3, width: "100%" }}
+        >
+          <Grid container spacing={2}>
+            {!lista.length ? (
+              <></>
+            ) : (
+              <>
+                {(() => {
+                  let columnas = [];
+                  for (const key of campos(lista)) {
+                    if (key == "iva") {
                       columnas.push(
                         <Grid
                           key={key}
                           item
-                          md={["name"].includes(key) ? 12 : 6}
+                          md={key == "name" || key == "code" ? 12 : 6}
                           xs={12}
                         >
-                          <TextField
-                            required={
-                              [
-                                "code",
-                                "description",
-                                "unidades",
-                                "contenido",
-                                "lista",
-                                "precioOferta",
-                              ].includes(key)
-                                ? false
-                                : true
-                            }
-                            fullWidth
-                            //   disabled={["code"].includes(key) ? true : false}
-                            InputProps={{
-                              readOnly: ["code","lista"].includes(key) ? true : false,
-                            }}
-                            name={key}
-                            label={traductor(key)}
-                            type={
-                              [
-                                // "code",
-                                "price",
-                                "usd",
-                                "pvpusd",
-                                "unidades",
-                                "pricepack",
-                                "precioOferta",
-                              ].includes(key)
-                                ? "number"
-                                : "text"
-                            }
-                            id={key}
-                            variant={["code","lista"].includes(key) ? "filled" : "outlined"}
-                            // autoComplete="new-password"
-                            onChange={handleKey}
-                            value={
-                              camposObject[key]
-                                // ? camposObject[key]
-                                // : producto[key]
-                            }
-                            // placeholder={`${element}`}
-                          />
-                        </Grid>
-                      );
-                    }
-                    return (
-                      <>
-                        {columnas}
-                        <Grid item xs={12}>
-                          <FormControl variant="outlined" sx={{ width: "100%" }}>
+                          <FormControl
+                            variant="outlined"
+                            sx={{ width: "100%" }}
+                          >
                             <InputLabel id="demo-simple-select-outlined-label">
-                              Categoria *
+                              IVA *
                             </InputLabel>
                             <Select
                               required
                               fullWidth
                               labelId="demo-simple-select-outlined-label"
                               id="demo-simple-select-outlined"
-                              value={categoria ? categoria : producto.label}
-                              onChange={handleCategoria}
-                              label="Categoría"
-                              name="label"
+                              // value={iva ? iva : producto.iva}
+                              value={
+                                camposObject[key]
+                                // ? camposObject[key]
+                                // : producto[key]
+                              }
+                              // value={"3"}
+                              // onChange={handleIva}
+                              onChange={handleKey}
+                              label="iva"
+                              name="iva"
                               sx={{ width: "100%" }}
                             >
-                              {/* <MenuItem value="">
-                                <em>None</em>
-                              </MenuItem> */}
-                              {navList
-                                .sort(function (a, b) {
-                                  if (a > b) {
-                                    return 1;
-                                  }
-                                  if (a < b) {
-                                    return -1;
-                                  }
-                                  // a must be equal to b
-                                  return 0;
-                                })
-                                .map((item) => (
-                                  <MenuItem key={item} value={item}>
-                                    {capitalizeFirstLetter(item)}
-                                  </MenuItem>
-                                ))}
+                              <MenuItem value="21">21</MenuItem>
+                              <MenuItem value="10.5">10.5</MenuItem>
                             </Select>
                           </FormControl>
                         </Grid>
-                        <Grid item xs={12}>
-                          <FileInput img={producto.image} />
-                        </Grid>
-                      </>
-                    );
-                  })()}
-                </>
-              )}
-            </Grid>
-            <Stack direction="row" spacing={2} sx={{ mt: 3, mb: 2 }}>
-              <Button
-                startIcon={<DeleteIcon />}
-                color="error"
-                type="button"
-                fullWidth
-                variant="contained"
-                onClick={handleDelete}
-                // disabled={botonSubmit}
-              >
-                Eliminar
-              </Button>
-              <Button
-                startIcon={<EditIcon />}
-                type="submit"
-                fullWidth
-                variant="contained"
-              >
-                Aplicar
-              </Button>
-            </Stack>
+                      );
 
-            <Grid container justifyContent="center">
-              <Grid item>
-                {/* <Link style={{ color: "inherit", display: "flex", flexDirection: "row", alignItems: "center",}}
+                      continue;
+                    } else if (key == "oferta") {
+                      columnas.push(
+                        <Grid
+                          key={key}
+                          item
+                          md={key == "name" || key == "code" ? 12 : 6}
+                          xs={12}
+                        >
+                          <FormControl
+                            variant="outlined"
+                            sx={{ width: "100%" }}
+                          >
+                            <InputLabel id="demo-simple-select-outlined-label">
+                              Oferta
+                            </InputLabel>
+                            <Select
+                              required
+                              fullWidth
+                              labelId="demo-simple-select-outlined-label"
+                              id="demo-simple-select-outlined"
+                              // value={iva ? iva : producto.iva}
+                              value={
+                                camposObject[key]
+                                ? camposObject[key]
+                                : "no"
+                              }
+                              // value={"3"}
+                              // onChange={handleOferta}
+                              onChange={handleKey}
+                              label="oferta"
+                              name="oferta"
+                              sx={{ width: "100%" }}
+                            >
+                              <MenuItem value="si">si</MenuItem>
+                              <MenuItem value="no">no</MenuItem>
+                            </Select>
+                          </FormControl>
+                        </Grid>
+                      );
+                      continue;
+                    }
+                    columnas.push(
+                      <Grid
+                        key={key}
+                        item
+                        md={["name"].includes(key) ? 12 : 6}
+                        xs={12}
+                      >
+                        <TextField
+                          required={
+                            [
+                              "code",
+                              "description",
+                              "unidades",
+                              "contenido",
+                              "lista",
+                              "precioOferta",  
+                              "ofertaUno",
+                              "ofertaDos",
+                              "oferta",
+                              "ventaMinima",
+                            ].includes(key)
+                              ? false
+                              : true
+                          }
+                          fullWidth
+                          //   disabled={["code"].includes(key) ? true : false}
+                          InputProps={{
+                            readOnly: ["code", "lista"].includes(key)
+                              ? true
+                              : false,
+                          }}
+                          name={key}
+                          label={traductor(key)}
+                          type={
+                            [
+                              // "code",
+                              "price",
+                              "usd",
+                              "pvpusd",
+                              "unidades",
+                              "pricepack",
+                              "precioOferta",
+                            ].includes(key)
+                              ? "number"
+                              : "text"
+                          }
+                          id={key}
+                          variant={
+                            ["code", "lista"].includes(key)
+                              ? "filled"
+                              : "outlined"
+                          }
+                          // autoComplete="new-password"
+                          onChange={handleKey}
+                          value={
+                            camposObject[key]
+                            // ? camposObject[key]
+                            // : producto[key]
+                          }
+                          // placeholder={`${element}`}
+                        />
+                      </Grid>
+                    );
+                  }
+                  return (
+                    <>
+                      {columnas}
+                      <Grid item xs={12}>
+                        <FormControl variant="outlined" sx={{ width: "100%" }}>
+                          <InputLabel id="demo-simple-select-outlined-label">
+                            Categoria *
+                          </InputLabel>
+                          <Select
+                            required
+                            fullWidth
+                            labelId="demo-simple-select-outlined-label"
+                            id="demo-simple-select-outlined"
+                            value={categoria ? categoria : producto.label}
+                            onChange={handleCategoria}
+                            label="Categoría"
+                            name="label"
+                            sx={{ width: "100%" }}
+                          >
+                            {/* <MenuItem value="">
+                                <em>None</em>
+                              </MenuItem> */}
+                            {navList
+                              .sort(function (a, b) {
+                                if (a > b) {
+                                  return 1;
+                                }
+                                if (a < b) {
+                                  return -1;
+                                }
+                                // a must be equal to b
+                                return 0;
+                              })
+                              .map((item) => (
+                                <MenuItem key={item} value={item}>
+                                  {capitalizeFirstLetter(item)}
+                                </MenuItem>
+                              ))}
+                          </Select>
+                        </FormControl>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <FileInput img={producto.image} />
+                      </Grid>
+                    </>
+                  );
+                })()}
+              </>
+            )}
+          </Grid>
+          <Stack direction="row" spacing={2} sx={{ mt: 3, mb: 2 }}>
+            <Button
+              startIcon={<DeleteIcon />}
+              color="error"
+              type="button"
+              fullWidth
+              variant="contained"
+              onClick={handleDelete}
+              // disabled={botonSubmit}
+            >
+              Eliminar
+            </Button>
+            <Button
+              startIcon={<EditIcon />}
+              type="submit"
+              fullWidth
+              variant="contained"
+            >
+              Aplicar
+            </Button>
+          </Stack>
+
+          <Grid container justifyContent="center">
+            <Grid item>
+              {/* <Link style={{ color: "inherit", display: "flex", flexDirection: "row", alignItems: "center",}}
                   to={`/home`} >
                     Ya tiene una cuenta? Iniciar sesión
                   </Link> */}
-              </Grid>
             </Grid>
-          </Box>
+          </Grid>
+        </Box>
       </Box>
     </Container>
     // </ThemeProvider>
