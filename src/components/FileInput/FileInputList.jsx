@@ -16,6 +16,7 @@ const FileInput = ({ img }) => {
 
   return (
     <>
+    <Box>
       <input
         accept="*/*"
         type="file"
@@ -56,6 +57,7 @@ const FileInput = ({ img }) => {
         }}
         alt="sin imagen"
       /> */}
+      </Box>
     </>
   );
 };
