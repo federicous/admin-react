@@ -37,14 +37,14 @@ export default function InteractiveList() {
   const [open, setOpen] = React.useState(false);
 
   React.useEffect(() => {
-    apiQuery.get(`/descargas/lista`).then((respuesta) => {
+    apiQuery.get(`/api/descargas/lista`).then((respuesta) => {
       setListas(respuesta);
     });
   }, [borrado, resultado]);
 
   function deleteFile(item) {
     apiQuery
-      .delete(`/descargas/lista/${item}`)
+      .delete(`/api/descargas/lista/${item}`)
       .then((respuesta) => {
         setBorrado(respuesta);
       })
@@ -71,13 +71,13 @@ export default function InteractiveList() {
     // );
 
     apiQuery
-      .postFormData(`/descargas/lista`, data)
+      .postFormData(`/api/descargas/lista`, data)
       .then((respuesta) => {
         // console.log(respuesta);
         // console.log(respuesta.result);
         // console.log(respuesta.response);
-        setResultado(respuesta)
-        handleClose()
+        setResultado(respuesta);
+        handleClose();
       })
       // .finally(()=>{
       //   document.getElementById("formLista").reset()
@@ -86,7 +86,6 @@ export default function InteractiveList() {
         error = new Error();
       });
   };
-
 
   return (
     <Box sx={{ flexGrow: 1, maxWidth: 652 }}>
@@ -97,28 +96,37 @@ export default function InteractiveList() {
           </Typography>
           <Demo>
             <List dense={false}>
-              {listas.map((item) => (
-                <ListItem
-                  key={item}
-                  button
-                  secondaryAction={
-                    <Button variant="outlined" 
-                    onClick={() => deleteFile(item)} startIcon={<DeleteIcon />}>
-                      Eliminar
-                    </Button>
-                  }
-                >
-                  <ListItemAvatar>
-                    <Avatar>
-                      <FileIcon />
-                    </Avatar>
-                  </ListItemAvatar>
-                  <ListItemText
-                    primary={item}
-                    //     secondary={secondary ? "Secondary text" : null}
-                  />
-                </ListItem>
-              ))}
+              {listas ? (
+                <>
+                  {listas.map((item) => (
+                    <ListItem
+                      key={item}
+                      button
+                      secondaryAction={
+                        <Button
+                          variant="outlined"
+                          onClick={() => deleteFile(item)}
+                          startIcon={<DeleteIcon />}
+                        >
+                          Eliminar
+                        </Button>
+                      }
+                    >
+                      <ListItemAvatar>
+                        <Avatar>
+                          <FileIcon />
+                        </Avatar>
+                      </ListItemAvatar>
+                      <ListItemText
+                        primary={item}
+                        //     secondary={secondary ? "Secondary text" : null}
+                      />
+                    </ListItem>
+                  ))}
+                </>
+              ) : (
+                <></>
+              )}
             </List>
           </Demo>
         </Grid>
@@ -130,18 +138,18 @@ export default function InteractiveList() {
         sx={{ mt: 3, width: "100%" }}
         id="formLista"
       >
-          <FileInputList />
-          <Button
-            variant="contained"
-            fullWidth
-            startIcon={<AddIcon />}
-            type="submit"
-            sx={{ mt: 3, mb: 2 }}
-            // disabled={botonSubmit}
-            onClick={handleToggle}
-          >
-            Agregar
-          </Button>
+        <FileInputList />
+        <Button
+          variant="contained"
+          fullWidth
+          startIcon={<AddIcon />}
+          type="submit"
+          sx={{ mt: 3, mb: 2 }}
+          // disabled={botonSubmit}
+          onClick={handleToggle}
+        >
+          Agregar
+        </Button>
       </Box>
     </Box>
   );
