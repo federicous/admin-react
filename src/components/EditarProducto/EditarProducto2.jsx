@@ -458,6 +458,31 @@ export default function AddProduct() {
                     <>
                       {columnas}
                       <Grid item xs={12}>
+                      <FormControl
+                            variant="outlined"
+                            sx={{ width: "100%" }}
+                          >
+                            <TextField
+                              fullWidth
+                              type="number"
+                              labelId="demo-simple-select-outlined-label"
+                              id="demo-simple-select-outlined"
+                              // value={iva ? iva : producto.iva}
+                              value={
+                                camposObject["multiplo"]
+                                // ? camposObject[key]
+                                // : producto[key]
+                              }
+                              // value={"3"}
+                              // onChange={handleIva}
+                              onChange={handleKey}
+                              label="Multiplo"
+                              name="multiplo"
+                              sx={{ width: "100%" }}
+                            />
+                          </FormControl>
+                      </Grid>
+                      <Grid item xs={12}>
                         <FormControl variant="outlined" sx={{ width: "100%" }}>
                           <InputLabel id="demo-simple-select-outlined-label">
                             Categoria *
