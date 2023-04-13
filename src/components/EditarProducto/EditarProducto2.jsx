@@ -93,6 +93,17 @@ let sinparCampos = [
   "oferta",
   "precioOferta",
 ];
+let coltecCampos = [
+  "name",
+  "lista",
+  "code",
+  "price",
+  "iva",
+  "unidades",
+  "presentacion",
+  "oferta",
+  "precioOferta",
+];
 
 const campos = (lista) => {
   if (lista == "tekbond") {
@@ -105,6 +116,8 @@ const campos = (lista) => {
     return buloneriaBremenCampos;
   } else if (lista == "sinpar") {
     return sinparCampos;
+  } else if (lista == "coltec") {
+    return coltecCampos;
   }
 };
 
