@@ -44,6 +44,7 @@ let tekbondCampos = [
   "iva",
   "oferta",
   "precioOferta",
+  "novedades",
 ];
 let bremenCampos = [
   "lista",
@@ -55,6 +56,7 @@ let bremenCampos = [
   "description",
   "oferta",
   "precioOferta",
+  "novedades",
 ];
 let kantonCampos = [
   "lista",
@@ -66,6 +68,7 @@ let kantonCampos = [
   "description",
   "oferta",
   "precioOferta",
+  "novedades",
 ];
 let buloneriaBremenCampos = [
   "lista",
@@ -79,6 +82,7 @@ let buloneriaBremenCampos = [
   "punta",
   "oferta",
   "precioOferta",
+  "novedades",
   // "terminacion",
 ];
 let sinparCampos = [
@@ -92,6 +96,7 @@ let sinparCampos = [
   "ventaMinima",
   "oferta",
   "precioOferta",
+  "novedades",
 ];
 let coltecCampos = [
   "name",
@@ -103,6 +108,7 @@ let coltecCampos = [
   "presentacion",
   "oferta",
   "precioOferta",
+  "novedades",
 ];
 
 const campos = (lista) => {
@@ -135,6 +141,7 @@ export default function AddProduct() {
   const [lista, setLista] = useState("");
   const [iva, setIva] = useState("");
   const [oferta, setOferta] = useState("");
+  const [novedades, setNovedades] = useState("");
   const [producto, setProducto] = useState({});
   const [camposObject, setCamposObject] = useState({});
   const [resultUpdate, setResultUpdate] = useState({});
@@ -191,6 +198,10 @@ export default function AddProduct() {
 
   const handleOferta = (event) => {
     setOferta(event.target.value);
+  };
+
+  const handleNovedades = (event) => {
+    setNovedades(event.target.value);
   };
 
   const handleLista = (event) => {
@@ -271,6 +282,7 @@ export default function AddProduct() {
       punta: "Punta",
       terminacion: "Terminación",
       oferta: "Oferta",
+      novedades: "Novedades",
       precioOferta: "Precio Oferta",
       ofertaUno: "Oferta I",
       ofertaDos: "Oferta II",
@@ -361,6 +373,46 @@ export default function AddProduct() {
                         </Grid>
                       );
 
+                      continue;
+                    } else if (key == "novedades") {
+                      columnas.push(
+                        <Grid
+                          key={key}
+                          item
+                          md={key == "name" || key == "code" ? 12 : 12}
+                          xs={12}
+                        >
+                          <FormControl
+                            variant="outlined"
+                            sx={{ width: "100%" }}
+                          >
+                            <InputLabel id="demo-simple-select-outlined-label">
+                              Novedades
+                            </InputLabel>
+                            <Select
+                              required
+                              fullWidth
+                              labelId="demo-simple-select-outlined-label"
+                              id="demo-simple-select-outlined"
+                              // value={iva ? iva : producto.iva}
+                              value={
+                                camposObject[key]
+                                ? camposObject[key]
+                                : "no"
+                              }
+                              // value={"3"}
+                              // onChange={handleOferta}
+                              onChange={handleKey}
+                              label="novedades"
+                              name="novedades"
+                              sx={{ width: "100%" }}
+                            >
+                              <MenuItem value="si">si</MenuItem>
+                              <MenuItem value="no">no</MenuItem>
+                            </Select>
+                          </FormControl>
+                        </Grid>
+                      );
                       continue;
                     } else if (key == "oferta") {
                       columnas.push(
