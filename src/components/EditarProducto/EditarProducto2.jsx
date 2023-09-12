@@ -103,6 +103,7 @@ let coltecCampos = [
   "lista",
   "code",
   "price",
+  "usd",
   "iva",
   "unidades",
   "presentacion",
