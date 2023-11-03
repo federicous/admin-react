@@ -40,9 +40,11 @@ import Usuarios from "../Usuarios/Usuarios";
 import EditarProducto2 from "../EditarProducto/EditarProducto2";
 import AddProduct from "../AddProduct/AddProduct";
 import Login from "../Login/Login";
-import Download from "../Download/Download"
-import ListAltIcon from '@mui/icons-material/ListAlt';
-import DownloadIcon from "@mui/icons-material/GetApp"
+import Download from "../Download/Download";
+import Promo from "../Promo/Promo";
+import ListAltIcon from "@mui/icons-material/ListAlt";
+import DownloadIcon from "@mui/icons-material/GetApp";
+import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
 import { GetApp } from "@mui/icons-material";
 // import ApiQuery from "../utils/apiQuery/apiQuery"
 // let apiQuery = new ApiQuery();
@@ -55,6 +57,7 @@ function ResponsiveDrawer(props) {
   // const [isAdmin, setIsAdmin] = useState(false)
   const [open, setOpen] = React.useState(false);
   const [openClientes, setOpenClientes] = React.useState(false);
+  const [openPromociones, setOpenPromociones] = React.useState(false);
   const [openListas, setOpenListas] = React.useState(false);
 
   const handleClick = () => {
@@ -63,6 +66,10 @@ function ResponsiveDrawer(props) {
 
   const handleClickClientes = () => {
     setOpenClientes(!openClientes);
+  };
+
+  const handleClickPromociones = () => {
+    setOpenPromociones(!openPromociones);
   };
 
   const handleClickListas = () => {
@@ -143,7 +150,10 @@ function ResponsiveDrawer(props) {
                 <ListItemIcon>
                   <GetApp />
                 </ListItemIcon>
-                <ListItemText primary="Descargas" sx={{ color: "text.primary" }} />
+                <ListItemText
+                  primary="Descargas"
+                  sx={{ color: "text.primary" }}
+                />
               </ListItemButton>
             </Link>
           </List>
@@ -159,6 +169,37 @@ function ResponsiveDrawer(props) {
         <Collapse in={openClientes} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
             <Link to="/productos/agregar" style={{ textDecoration: "none" }}>
+              <ListItemButton sx={{ pl: 4 }}>
+                <ListItemIcon>
+                  <AddIcon />
+                </ListItemIcon>
+                <ListItemText
+                  primary="Agregar"
+                  sx={{ color: "text.primary" }}
+                />
+              </ListItemButton>
+            </Link>
+            <Link to="/producto" style={{ textDecoration: "none" }}>
+              <ListItemButton sx={{ pl: 4 }}>
+                <ListItemIcon>
+                  <EditIcon />
+                </ListItemIcon>
+                <ListItemText primary="Editar" sx={{ color: "text.primary" }} />
+              </ListItemButton>
+            </Link>
+          </List>
+        </Collapse>
+        {/* PROMO #############################################*/}
+        <ListItemButton onClick={handleClickPromociones}>
+          <ListItemIcon>
+            <CardGiftcardIcon />
+          </ListItemIcon>
+          <ListItemText primary="Promociones" />
+          {openPromociones ? <ExpandLess /> : <ExpandMore />}
+        </ListItemButton>
+        <Collapse in={openPromociones} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding>
+            <Link to="/productos/promociones" style={{ textDecoration: "none" }}>
               <ListItemButton sx={{ pl: 4 }}>
                 <ListItemIcon>
                   <AddIcon />
@@ -257,6 +298,7 @@ function ResponsiveDrawer(props) {
             <Route exact path="/" element={<Login />} />
             <Route exact path="/productos/" element={<Productos />} />
             <Route exact path="/productos/agregar/" element={<AddProduct />} />
+            <Route exact path="/productos/promociones/" element={<Promo />} />
             <Route exact path="/producto/:id" element={<EditarProducto2 />} />
             <Route exact path="/ordenes" element={<Ordenes />} />
             <Route exact path="/listas" element={<Listas />} />
