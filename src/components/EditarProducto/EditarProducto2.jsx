@@ -31,6 +31,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} {...props} />;
 });
 
+// Agregar campos SIN EL LABEL
 let tekbondCampos = [
   "lista",
   "code",
@@ -111,6 +112,16 @@ let coltecCampos = [
   "precioOferta",
   "novedades",
 ];
+let brmElectroCampos = [
+  "name",
+  "lista",
+  "code",
+  "price",
+  "iva",
+  "linea",
+  "codigobarra",
+];
+
 
 const campos = (lista) => {
   if (lista == "tekbond") {
@@ -125,6 +136,8 @@ const campos = (lista) => {
     return sinparCampos;
   } else if (lista == "coltec") {
     return coltecCampos;
+  } else if (lista == "brm electro") {
+    return brmElectroCampos;
   }
 };
 

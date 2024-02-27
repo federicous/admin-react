@@ -41,25 +41,25 @@ function Copyright(props) {
   );
 }
 
-let tekbondCampos = ["code", "linea", "contenido", "presentacion", "color", "unidades", "usd", "pvpusd", "iva",];
-let bremenCampos = ["name", "code", "price", "iva", "origin", "description"];
-let kantonCampos = ["name", "code", "price", "iva", "pricepack", "description"];
-let sinparCampos = ["name", "code", "price", "iva", "ofertaUno", "ofertaDos", "ventaMinima"];
-let coltecCampos = ["name", "code", "price", "iva", "presentacion", "unidades"];
+// let tekbondCampos = ["code", "linea", "contenido", "presentacion", "color", "unidades", "usd", "pvpusd", "iva",];
+// let bremenCampos = ["name", "code", "price", "iva", "origin", "description"];
+// let kantonCampos = ["name", "code", "price", "iva", "pricepack", "description"];
+// let sinparCampos = ["name", "code", "price", "iva", "ofertaUno", "ofertaDos", "ventaMinima"];
+// let coltecCampos = ["name", "code", "price", "iva", "presentacion", "unidades"];
 
-const campos = (lista) => {
-  if (lista == "tekbond") {
-    return tekbondCampos;
-  } else if (lista == "bremen") {
-    return bremenCampos;
-  } else if (lista == "kanton") {
-    return kantonCampos;
-  } else if (lista == "sinpar"){
-    return sinparCampos;
-  } else if (lista == "coltec"){
-    return coltecCampos;
-  }
-};
+// const campos = (lista) => {
+//   if (lista == "tekbond") {
+//     return tekbondCampos;
+//   } else if (lista == "bremen") {
+//     return bremenCampos;
+//   } else if (lista == "kanton") {
+//     return kantonCampos;
+//   } else if (lista == "sinpar"){
+//     return sinparCampos;
+//   } else if (lista == "coltec"){
+//     return coltecCampos;
+//   }
+// };
 
 function capitalizeFirstLetter(string) {
   let cadena = string.toLowerCase();
@@ -364,7 +364,7 @@ export default function AddProduct() {
             ) : (
               <>
                 {(() => {
-                  if (["bremen","kanton","buloneria bremen","sinpar","coltec"].find(element => element==lista)) {
+                  if (["bremen","kanton","buloneria bremen","sinpar","coltec","brm electro"].find(element => element==lista)) {
                     return (
                       <>
                         <Grid item xs={12}>
