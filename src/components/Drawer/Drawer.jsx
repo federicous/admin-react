@@ -8,6 +8,7 @@ import Divider from "@mui/material/Divider";
 import Drawer from "@mui/material/Drawer";
 import IconButton from "@mui/material/IconButton";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
+import AddPhoto from "@mui/icons-material/AddPhotoAlternate";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
@@ -42,6 +43,7 @@ import AddProduct from "../AddProduct/AddProduct";
 import Login from "../Login/Login";
 import Download from "../Download/Download";
 import Promo from "../Promo/Promo";
+import ImagenPromo from "../ImagenPromo/ImagenPromo"
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import DownloadIcon from "@mui/icons-material/GetApp";
 import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
@@ -199,7 +201,7 @@ function ResponsiveDrawer(props) {
         </ListItemButton>
         <Collapse in={openPromociones} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
-            <Link to="/productos/promociones" style={{ textDecoration: "none" }}>
+            {/* <Link to="/productos/promociones" style={{ textDecoration: "none" }}>
               <ListItemButton sx={{ pl: 4 }}>
                 <ListItemIcon>
                   <AddIcon />
@@ -216,6 +218,17 @@ function ResponsiveDrawer(props) {
                   <EditIcon />
                 </ListItemIcon>
                 <ListItemText primary="Editar" sx={{ color: "text.primary" }} />
+              </ListItemButton>
+            </Link> */}
+            <Link to="/imagen" style={{ textDecoration: "none" }}>
+              <ListItemButton sx={{ pl: 4 }}>
+                <ListItemIcon>
+                  <AddPhoto />
+                </ListItemIcon>
+                <ListItemText
+                  primary="Imagen"
+                  sx={{ color: "text.primary" }}
+                />
               </ListItemButton>
             </Link>
           </List>
@@ -304,6 +317,7 @@ function ResponsiveDrawer(props) {
             <Route exact path="/listas" element={<Listas />} />
             <Route exact path="/usuarios" element={<Usuarios />} />
             <Route exact path="/descargas" element={<Download />} />
+            <Route exact path="/imagen" element={<ImagenPromo />} />
 
             {/* <Route exact path="/"  element={<Login />}/>
               <Route path="/" element={<ProtectedRoutes />}>

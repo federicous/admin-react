@@ -47,23 +47,13 @@ const FileInput = ({ img }) => {
           <Box mt={2} textAlign="center">
             <div>Imagen actual:</div>
             <img
-              src={`${config.SERVER}/images/${img ? img : "sin_imagen.jpg"}`}
+              src={`${config.SERVER}/images/promocion/${img ? img : "sin_imagen.jpg"}`}
               alt="imagen-actual"
               height="100px"
             />
           </Box>
         </>
       )}
-      {/* <CardMedia
-        component="img"
-        image={`${config.SERVER}/images/${img ? img : "sin_imagen.jpg"}`}
-        sx={{
-          height: { xs: "150px", sm: "200px" },
-          width: "100%",
-          objectFit: "cover",
-        }}
-        alt="sin imagen"
-      /> */}
     </>
   );
 };
