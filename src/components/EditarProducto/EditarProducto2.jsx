@@ -121,7 +121,13 @@ let brmElectroCampos = [
   "linea",
   "codigobarra",
 ];
-
+let interquim = [
+  "name",
+  "lista",
+  "code",
+  "price",
+  "iva",
+];
 
 const campos = (lista) => {
   if (lista == "tekbond") {
@@ -138,6 +144,8 @@ const campos = (lista) => {
     return coltecCampos;
   } else if (lista == "brm electro") {
     return brmElectroCampos;
+  } else if (lista == "interquim") {
+    return interquim;
   }
 };
 

@@ -364,7 +364,7 @@ export default function AddProduct() {
             ) : (
               <>
                 {(() => {
-                  if (["bremen","kanton","buloneria bremen","sinpar","coltec","brm electro"].find(element => element==lista)) {
+                  if (["bremen","kanton","buloneria bremen","sinpar","coltec","brm electro","interquim"].find(element => element==lista)) {
                     return (
                       <>
                         <Grid item xs={12}>
