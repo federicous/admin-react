@@ -120,6 +120,9 @@ let brmElectroCampos = [
   "iva",
   "linea",
   "codigobarra",
+  "oferta",
+  "precioOferta",
+  "novedades",
 ];
 let interquim = [
   "name",
@@ -127,6 +130,9 @@ let interquim = [
   "code",
   "price",
   "iva",
+  "oferta",
+  "precioOferta",
+  "novedades",
 ];
 
 const campos = (lista) => {
