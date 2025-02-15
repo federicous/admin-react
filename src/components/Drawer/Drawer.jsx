@@ -48,6 +48,8 @@ import ListAltIcon from "@mui/icons-material/ListAlt";
 import DownloadIcon from "@mui/icons-material/GetApp";
 import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
 import { GetApp } from "@mui/icons-material";
+import ResetPassword from "../ResetPassword/ResetPassword";
+import Clientes from "../Clientes/Clientes";
 // import ApiQuery from "../utils/apiQuery/apiQuery"
 // let apiQuery = new ApiQuery();
 
@@ -170,7 +172,7 @@ function ResponsiveDrawer(props) {
         </ListItemButton>
         <Collapse in={openClientes} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
-            <Link to="/productos/agregar" style={{ textDecoration: "none" }}>
+            {/* <Link to="/productos/agregar" style={{ textDecoration: "none" }}>
               <ListItemButton sx={{ pl: 4 }}>
                 <ListItemIcon>
                   <AddIcon />
@@ -180,13 +182,21 @@ function ResponsiveDrawer(props) {
                   sx={{ color: "text.primary" }}
                 />
               </ListItemButton>
-            </Link>
-            <Link to="/producto" style={{ textDecoration: "none" }}>
+            </Link> */}
+            <Link to="/resetPassword" style={{ textDecoration: "none" }}>
               <ListItemButton sx={{ pl: 4 }}>
                 <ListItemIcon>
                   <EditIcon />
                 </ListItemIcon>
                 <ListItemText primary="Editar" sx={{ color: "text.primary" }} />
+              </ListItemButton>
+            </Link>
+            <Link to="/clientes" style={{ textDecoration: "none" }}>
+              <ListItemButton sx={{ pl: 4 }}>
+                <ListItemIcon>
+                  <EditIcon />
+                </ListItemIcon>
+                <ListItemText primary="Administrar" sx={{ color: "text.primary" }} />
               </ListItemButton>
             </Link>
           </List>
@@ -318,7 +328,8 @@ function ResponsiveDrawer(props) {
             <Route exact path="/usuarios" element={<Usuarios />} />
             <Route exact path="/descargas" element={<Download />} />
             <Route exact path="/imagen" element={<ImagenPromo />} />
-
+            <Route exact path="/resetPassword" element={<ResetPassword />} />
+            <Route exact path="/clientes" element={<Clientes />} />
             {/* <Route exact path="/"  element={<Login />}/>
               <Route path="/" element={<ProtectedRoutes />}>
                 <Route path="/home" element={<HomePage2 />} />
