@@ -49,22 +49,22 @@ const ItemListContainer = () => {
 					</Box>
 				</>) : (<>
 					<Box sx={{ width: '100%' }}>
-						<Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+						{/* <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
 							<Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
 								<Tab label="Agregar" />
 								<Tab label="Lista" />
-								{/* <Tab label="Lista" /> */}
 							</Tabs>
 						</Box>
 						<CustomTabPanel value={value} index={0}>
 							<Clientes/>
 						</CustomTabPanel>
 						<CustomTabPanel value={value} index={1}>
-							{/* <ClientesDataGrid/> */}
-						</CustomTabPanel>
+							<ClientesDataGrid/>
+						</CustomTabPanel> */}
 						{/* <CustomTabPanel value={value} index={2}>
 							Item Three
 						</CustomTabPanel> */}
+						<Clientes/>
 					</Box>
 
 				</>

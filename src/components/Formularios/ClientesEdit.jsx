@@ -24,14 +24,10 @@ import {
 import { esES } from '@mui/x-data-grid/locales';
 import {provincias} from "../utils/provincias"
 import {localidades} from "../utils/localidades"
-// import {
-//   randomCreatedDate,
-//   randomTraderName,
-//   randomId,
-//   randomArrayItem,
-// } from '@mui/x-data-grid-generator';
-
 import ApiQuery from "../utils/apiQuery/apiQuery";
+import {config} from "../../config/config";
+import EmailCell from "../CustomCell/EmailCell";
+import {Snackbar, Alert} from '@mui/material';
 
 let apiQuery = new ApiQuery();
 
@@ -102,9 +98,10 @@ function EditToolbar(props) {
 
   const handleClick = () => {
     const _id = generarNumeroAleatorio(6);
+    const nuevoCliente = true;
     setRows((oldRows) => [
       ...oldRows,
-      { _id, name: '', email: '', ferreteria: '',vendedor: '',localidad: '',provincia:'',address:'',cuit:'',phone:'',password:'', isNew: true },
+      { _id, nuevoCliente: nuevoCliente , name: '', email: '', ferreteria: '',vendedor: '',localidad: '',provincia:'',address:'',cuit:'',phone:'',password:'', isNew: true },
     ]);
     setRowModesModel((oldModel) => ({
       ...oldModel,
@@ -114,24 +111,24 @@ function EditToolbar(props) {
 
   return (
     <GridToolbarContainer>
-	<div style={{ width: '100%' }}>
-	<Box
-	 sx={{   
-	display: "flex",
-	flexDirection: "row",
-	justifyContent: 'space-between'
-}} 
-	>
-	<Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
-        Agregar usuario
-      </Button>
-      <GridToolbar />
-      {/* <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
-        Add record
-      </Button>
-      <GridToolbar /> */}
-      <GridToolbarQuickFilter />
-      </Box>
+      <div style={{ width: '100%' }}>
+        <Box
+          sx={{   
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: 'space-between'
+          }} 
+          >
+          <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
+            Agregar usuario
+          </Button>
+          <GridToolbar />
+          {/* <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
+            Add record
+          </Button>
+          <GridToolbar /> */}
+          <GridToolbarQuickFilter />
+        </Box>
       </div>
     </GridToolbarContainer>
   );
@@ -149,6 +146,96 @@ export default function FullFeaturedCrudGrid() {
   const [listaClientes, setListaClientes] = React.useState([])
   const [localidadArray, setLocalidadArray] = React.useState([]);
   const [provincia, setProvincia] = React.useState('');
+  const [columnVisibilityModel, setColumnVisibilityModel] = React.useState({
+    nuevoCliente: false,
+        });
+  const [vendedor, setVendedor] = React.useState('');
+  const [localidad, setLocalidad] = React.useState('');
+  const [nombre, setNombre] = React.useState('');
+  const [nombreError, setNombreError] = React.useState(false);
+  const [apellido, setApellido] = React.useState('');
+  const [apellidoError, setApellidoError] = React.useState(false);
+  const [correo, setCorreo] = React.useState('');
+  const [correoError, setCorreoError] = React.useState(false);
+  const [password, setPassword] = React.useState('');
+  const [repeatPassword, setRepeatPassword] = React.useState('');
+  const [repeatPasswordError, setRepeatPasswordError] = React.useState(false);
+  const [calle, setCalle] = React.useState('');
+  const [calleError, setCalleError] = React.useState(false);
+  const [altura, setAltura] = React.useState('');
+  const [alturaError, setAlturaError] = React.useState(false);
+  const [cuit, setCuit] = React.useState('');
+  const [cuitError, setCuitError] = React.useState(false);
+  const [ferreteria, setFerreteria] = React.useState('');
+  const [ferreteriaError, setFerreteriaError] = React.useState(false);
+  const [telefono, setTelefono] = React.useState('');
+  const [telefonoError, setTelefonoError] = React.useState(false);
+  const [botonSubmit, setBotonSubmit] = React.useState(true);
+  const [passwordError, setPasswordError] = React.useState(false);
+  const [showPassword, setShowPassword] = React.useState(false);
+  const [openSnackBar, setOpenSnackBar] = React.useState(false);
+  const [openSnackBarError, setOpenSnackBarError] = React.useState(false);
+  
+  const handleClickSnackBar = () => {
+    setOpenSnackBar(true);
+  };
+  const handleCloseSnackBar = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenSnackBar(false);
+  };
+
+  const handleClickSnackBarError = () => {
+    setOpenSnackBarError(true);
+  };
+  const handleCloseSnackBarError = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenSnackBarError(false);
+  };
+
+  const registrar = (usuario) => {
+    console.log(usuario);
+    // return
+    delete usuario.nuevoCliente
+    delete usuario._id
+
+    apiQuery.postSimple(`/api/users`, usuario)
+    .then((res) => {
+      // setListaClientes(res);
+      // setRows(res)
+      console.log(res);		
+      setOpen(false);
+    })
+  };
+
+  const modificar = (usuario) => {
+    console.log(usuario);
+    // return
+    delete usuario.nuevoCliente
+    delete usuario.isNew
+    apiQuery.put(`/api/users`, usuario)
+    .then((res) => {
+      // setListaClientes(res);
+      // setRows(res)
+      console.log(res);		
+      setOpen(false);
+    })
+  };
+
+  const eliminarUsuario = (usuario) => {
+    console.log(usuario);
+    // return
+    apiQuery.deleteSimple(`/api/users`, usuario)
+    .then((res) => {
+      // setListaClientes(res);
+      // setRows(res)
+      console.log(res);		
+      setOpen(false);
+    })
+  };
 
   const handleClose = () => {
   setOpen(false);
@@ -177,6 +264,7 @@ export default function FullFeaturedCrudGrid() {
 	const columnsBloqueados = [
 		{ field: 'name', headerName: 'Cliente', width: 130, flex:0.8, minWidth:110, editable: true, },
 		{ field: 'email', headerName: 'Email', width: 230, flex:1.5, minWidth:110, editable: true, },
+		// { field: 'email', headerName: 'Email', width: 230, flex:1.5, minWidth:110, editable: true, renderCell:(params) => (<EmailCell value={params.row.email}  />)},
 		// { field: 'fecha', headerName: 'Fecha', width: 130, flex:0.8, minWidth:110, type:"date", valueGetter: ({value}) => value && dayjs(value,'DD/MM/YYYY').toDate(), },
 		{ field: 'ferreteria', headerName: 'Ferreteria', width: 130, flex:0.8, minWidth:110, editable: true, },
 		{ field: 'vendedor', headerName: 'Vendedor', width: 130, flex:0.8 , minWidth:110, editable: true,
@@ -212,7 +300,12 @@ export default function FullFeaturedCrudGrid() {
 		{ field: 'cuit', headerName: 'Cuit', width: 130, flex:0.8 , minWidth:110, editable: true, type: "number"},
 		{ field: 'phone', headerName: 'Tel', width: 130, flex:0.8 , minWidth:110, editable: true, type: "number"},
 		{ field: 'descuento', headerName: 'Desc[%]', width: 130, flex:0.8 , minWidth:110, editable: true, type: "number", headerAlign:'center', align:'center'},
-		{ field: 'isAdmin', headerName: 'Admin', width: 130, flex:0.8 , minWidth:110, editable: true, headerAlign:'center', align:'center'},
+		{ field: 'isAdmin', headerName: 'Admin', width: 130, flex:0.8 , minWidth:110, editable: true, headerAlign:'center', align:'center',
+      type: 'singleSelect',
+      valueOptions: ['on', 'off'],
+      valueGetter: (params) => params.row.isAdmin ? params.row.isAdmin : ""
+    },
+		{ field: 'nuevoCliente', headerName: 'nuevo', width: 130, flex:0.8 , minWidth:110, editable: true, headerAlign:'center', align:'center'},
 		{ field: 'password', headerName: 'Clave', type: 'password', width: 130, flex:0.8 , minWidth:110, renderCell:(params) => ("**********"), editable: true, },
 		{
 			field: 'actions',
@@ -297,22 +390,24 @@ export default function FullFeaturedCrudGrid() {
   };
 
   const handleEditClick = (id) => () => {
-	console.log(id);
-	console.log(rowModesModel);
+	// console.log(id);
+	// console.log(rowModesModel);
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
   };
 
   const handleSaveClick = (id) => () => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
-    console.log(rowModesModel);
-    console.log(GridRowModes.View);
-	  console.log([id]);    
+    // console.log(rowModesModel);
+    // console.log(GridRowModes.View);
+	  // console.log([id]);    
   };
 
   const handleDeleteClick = (id) => () => {
-    console.log(rows.find((row) => row._id === id));
+    // console.log(rows.find((row) => row._id === id));
     const deletedRow = rows.find((row) => row._id === id)
+    eliminarUsuario({...deletedRow})
     setRows(rows.filter((row) => row._id !== id));
+    handleClickSnackBar()
   };
 
   const handleCancelClick = (id) => () => {
@@ -329,14 +424,35 @@ export default function FullFeaturedCrudGrid() {
 
   const processRowUpdate = (newRow) => {
     const updatedRow = { ...newRow, isNew: false };
-    console.log(rows);
+    // console.log(rows);
     setRows(rows.map((row) => (row._id === newRow._id ? updatedRow : row)));
-    console.log(rows);
-    console.log(updatedRow);
+    // console.log(rows);
+    // console.log(updatedRow);
     if (updatedRow.name && updatedRow.email && updatedRow.password && updatedRow.address && updatedRow.cuit && updatedRow.ferreteria && updatedRow.phone && updatedRow.provincia && updatedRow.localidad && updatedRow.vendedor) {
-      console.log(`COMPLETO`);      
+      console.log(`COMPLETO`);
+      if (updatedRow.nuevoCliente) {
+        console.log(`REGISTRAR`);
+        // delete updatedRow.nuevoCliente
+        // delete updatedRow._id
+        registrar({...updatedRow})
+        handleClickSnackBar()
+        // let filaOriginal = rows.filter((row) => row._id == updatedRow._id);
+        // const diferencias = compararObjetos(filaOriginal[0], updatedRow);
+        // diferencias._id = updatedRow._id
+        // console.log(diferencias);
+        // return updatedRow;
+      } else {
+        console.log(`MODIFICAR`);
+        // delete updatedRow.nuevoCliente
+        // delete updatedRow.isNew
+        modificar(updatedRow)
+        handleClickSnackBar()
+      }
     } else {
-      console.log(`FALTAN`);      
+      console.log(`FALTAN`);  
+      let filaOriginal = rows.filter((row) => row._id == updatedRow._id);
+      handleClickSnackBarError()
+      return filaOriginal;
     }
     let filaOriginal = rows.filter((row) => row._id == updatedRow._id);
     const diferencias = compararObjetos(filaOriginal[0], updatedRow);
@@ -350,86 +466,150 @@ export default function FullFeaturedCrudGrid() {
     setRowModesModel(newRowModesModel);
   };
 
-//   const columns = [
-//     { field: 'name', headerName: 'Name', width: 180, editable: true },
-//     {
-//       field: 'age',
-//       headerName: 'Age',
-//       type: 'number',
-//       width: 80,
-//       align: 'left',
-//       headerAlign: 'left',
-//       editable: true,
-//     },
-//     {
-//       field: 'joinDate',
-//       headerName: 'Join date',
-// //       type: 'date',
-//       width: 180,
-//       editable: true,
-//     },
-//     {
-//       field: 'role',
-//       headerName: 'Department',
-//       width: 220,
-//       editable: true,
-//       type: 'singleSelect',
-//       valueOptions: ['Market', 'Finance', 'Development'],
-//     },
-//     {
-//       field: 'actions',
-//       type: 'actions',
-//       headerName: 'Actions',
-//       width: 100,
-//       cellClassName: 'actions',
-//       getActions: ({ id }) => {
-// 	console.log(id);
-	
-//         const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
+// ############################################################################
+//                        VALIDACION DE LOS DATOS
+// ############################################################################
 
-//         if (isInEditMode) {
-//           return [
-//             <GridActionsCellItem
-//               icon={<SaveIcon />}
-//               label="Save"
-//               sx={{
-//                 color: 'primary.main',
-//               }}
-//               onClick={handleSaveClick(id)}
-//             />,
-//             <GridActionsCellItem
-//               icon={<CancelIcon />}
-//               label="Cancel"
-//               className="textPrimary"
-//               onClick={handleCancelClick(id)}
-//               color="inherit"
-//             />,
-//           ];
-//         }
+  const isEmailValid = (email) => {
+    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
+  };
 
-//         return [
-//           <GridActionsCellItem
-//             icon={<EditIcon />}
-//             label="Edit"
-//             className="textPrimary"
-//             onClick={handleEditClick(id)}
-//             color="inherit"
-//           />,
-//           <GridActionsCellItem
-//             icon={<DeleteIcon />}
-//             label="Delete"
-//             onClick={handleDeleteClick(id)}
-//             color="inherit"
-//           />,
-//         ];
-//       },
-//     },
-//   ];
+  const isBetween = (length, min, max) => length < min || length > max ? false : true;
+
+  const isPasswordSecure = (password) => {
+  // const re = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
+    const re = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})");
+    return re.test(password);
+  };
+
+  const isNumber = (number, min) => {
+    const re = new RegExp(`^[0-9]{${min},}$`);
+    return re.test(number);
+  }
+
+  function handleFirstName(e) {
+    let firstName= e.target.value
+    if (isBetween(firstName.length, 3, 25)) {
+      setNombre(firstName)
+      setNombreError(false)
+    } else {
+    setNombre('')
+    setNombreError(true)
+    }
+  }
+
+  function handleLastName(e) {
+    let lastName= e.target.value
+    if (isBetween(lastName.length, 3, 25)) {
+      setApellido(lastName)
+      setApellidoError(false)
+    } else {
+      setApellido('')
+      setApellidoError(true)
+    }
+  }
+
+  function handleEmail(e) {
+    let email= e.target.value
+    if (isEmailValid(email)) {
+      setCorreo(email)
+      setCorreoError(false)
+    } else {
+      setCorreo('')
+      setCorreoError(true)
+    }
+  }
+
+  function handlePassword(e) {
+    let password= e.target.value
+    if (isPasswordSecure(password)) {
+      setPassword(password)
+      setPasswordError(false)
+    } else {
+      setPassword('')
+      setPasswordError(true)
+    }
+  }
+
+  function handleRepeatPassword(e) {
+    let password= e.target.value
+      setRepeatPassword(password)
+  }
+
+  const handleProvincia = (event) => {
+    setProvincia(event.target.value);
+  };
+
+  const handleLocalidad = (event) => {
+    setLocalidad(event.target.value);
+  };
+
+  const handleVendedor = (event) => {
+    setVendedor(event.target.value);
+  };
+
+  const handlePhone = (e) => {
+    let telefono= e.target.value
+    if (isNumber(telefono,10)) {
+      setTelefono(telefono)
+      setTelefonoError(false)
+    } else {
+    setTelefono('')
+    setTelefonoError(true)
+    }
+  };
+
+  const handleCuit = (event) => {
+    let cuit= event.target.value
+    if (isNumber(cuit,11)) {
+      setCuit(cuit)
+      setCuitError(false)
+    } else {
+    setCuit('')
+    setCuitError(true)
+    }
+  };
+
+  const handleFerreteria = (event) => {
+    let ferreteria= event.target.value
+    if (isBetween(ferreteria.length, 3, 130)) {
+      setFerreteria(ferreteria)
+      setFerreteriaError(false)
+    } else {
+    setFerreteria('')
+    setFerreteriaError(true)
+    }
+
+  };
+
+  const handleCalle = (event) => {
+    let calle= event.target.value
+    if (isBetween(calle.length, 3, 130)) {
+      setCalle(calle)
+      setCalleError(false)
+    } else {
+    setCalle('')
+    setCalleError(true)
+    }
+  };
+
+  const handleAltura = (event) => {
+    let altura= event.target.value
+    if (isBetween(altura.length, 1, 30)) {
+      setAltura(altura)
+      setAlturaError(false)
+    } else {
+    setAltura('')
+    setAlturaError(true)
+    }
+  };
+
 
   return (
     <Box
       sx={{
-        height: 500,
+        height: 650,
         width: '100%',
         '& .actions': {
           color: 'text.secondary',
@@ -441,27 +621,48 @@ export default function FullFeaturedCrudGrid() {
     >
       <DataGrid
         rows={rows}
-	getRowId={(row) => row._id} 
+	      getRowId={(row) => row._id} 
         // columns={columns}
-	columns={(isAdmin || userAccesos.includes("desbloqueoSender")) ? columnsBloqueadosAdmin : columnsBloqueados}
+	      columns={(isAdmin || userAccesos.includes("desbloqueoSender")) ? columnsBloqueadosAdmin : columnsBloqueados}
         editMode="row"
         rowModesModel={rowModesModel}
         onRowModesModelChange={handleRowModesModelChange}
         onRowEditStop={handleRowEditStop}
         processRowUpdate={processRowUpdate}
+        columnVisibilityModel={columnVisibilityModel}
         slots={{ toolbar: EditToolbar }}
         slotProps={{
           toolbar: { setRows, setRowModesModel, showQuickFilter: true, },
         }}
-	// slots={{toolbar: GridToolbar}} 
-	// slotProps={{toolbar: {showQuickFilter: true,},}}
-	localeText={esES.components.MuiDataGrid.defaultProps.localeText}
-	initialState={{
-		sorting: {
-		  sortModel: [{ field: 'estado', sort: 'desc' }],
-		},
-	      }}
+        // slots={{toolbar: GridToolbar}} 
+        // slotProps={{toolbar: {showQuickFilter: true,},}}
+        localeText={esES.components.MuiDataGrid.defaultProps.localeText}
+        initialState={{
+          sorting: {
+            sortModel: [{ field: 'estado', sort: 'desc' }],
+          },
+        }}
       />
+      <Snackbar open={openSnackBar} autoHideDuration={3000} onClose={handleCloseSnackBar}>
+        <Alert
+          onClose={handleClose}
+          severity="success"
+          variant="filled"
+          sx={{ width: '100%' }}
+        >
+          Acción completada!
+        </Alert>
+      </Snackbar>
+      <Snackbar open={openSnackBarError} autoHideDuration={4000} onClose={handleCloseSnackBarError}>
+        <Alert
+          onClose={handleClose}
+          severity="error"
+          variant="filled"
+          sx={{ width: '100%' }}
+        >
+          Falta completar campos
+        </Alert>
+      </Snackbar>
     </Box>
   );
 }

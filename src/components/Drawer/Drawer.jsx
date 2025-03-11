@@ -183,14 +183,14 @@ function ResponsiveDrawer(props) {
                 />
               </ListItemButton>
             </Link> */}
-            <Link to="/resetPassword" style={{ textDecoration: "none" }}>
+            {/* <Link to="/resetPassword" style={{ textDecoration: "none" }}>
               <ListItemButton sx={{ pl: 4 }}>
                 <ListItemIcon>
                   <EditIcon />
                 </ListItemIcon>
                 <ListItemText primary="Editar" sx={{ color: "text.primary" }} />
               </ListItemButton>
-            </Link>
+            </Link> */}
             <Link to="/clientes" style={{ textDecoration: "none" }}>
               <ListItemButton sx={{ pl: 4 }}>
                 <ListItemIcon>

@@ -46,6 +46,48 @@ class ApiQuery {
     }
   }
 
+  async postSimple(url, data){
+    try {
+      const configuration = {
+        method: "post",
+        url: `${config.SERVER}${url}`,
+        headers: {
+          Authorization: `Bearer ${token}`,
+          // 'Content-Type': 'multipart/form-data',
+        },
+        withCredentials: true,
+        data: data,
+      };
+
+      let result = await axios(configuration)
+      return (result.data);
+
+    } catch (error) {
+        console.log(error);
+    }
+  }
+
+  async deleteSimple(url, data){
+    try {
+      const configuration = {
+        method: "delete",
+        url: `${config.SERVER}${url}`,
+        headers: {
+          Authorization: `Bearer ${token}`,
+          // 'Content-Type': 'multipart/form-data',
+        },
+        withCredentials: true,
+        data: data,
+      };
+
+      let result = await axios(configuration)
+      return (result.data);
+
+    } catch (error) {
+        console.log(error);
+    }
+  }
+
   async postFormData(url, data){
     try {
       const configuration = {
@@ -88,6 +130,26 @@ class ApiQuery {
     }
   }
 
+  async put(url, data){
+    try {
+      const configuration = {
+        method: "put",
+        url: `${config.SERVER}${url}`,
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          // 'Content-Type': 'multipart/form-data',
+        },
+        withCredentials: true,
+        data: data,
+      };
+
+      let result = await axios(configuration)
+      return (result.data);
+
+    } catch (error) {
+        console.log(error);
+    }
+  }
 
   async delete(url){
     try {
