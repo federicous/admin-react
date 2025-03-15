@@ -445,7 +445,10 @@ export default function FullFeaturedCrudGrid() {
         console.log(`MODIFICAR`);
         // delete updatedRow.nuevoCliente
         // delete updatedRow.isNew
-        modificar(updatedRow)
+        let filaOriginal = rows.filter((row) => row._id == updatedRow._id);
+        const diferencias = compararObjetos(filaOriginal[0], updatedRow);
+        diferencias._id = updatedRow._id        
+        modificar(diferencias)
         handleClickSnackBar()
       }
     } else {
