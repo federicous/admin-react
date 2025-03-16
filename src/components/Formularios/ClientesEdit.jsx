@@ -447,7 +447,8 @@ export default function FullFeaturedCrudGrid() {
         // delete updatedRow.isNew
         let filaOriginal = rows.filter((row) => row._id == updatedRow._id);
         const diferencias = compararObjetos(filaOriginal[0], updatedRow);
-        diferencias._id = updatedRow._id        
+        diferencias._id = updatedRow._id     
+        diferencias.email = updatedRow.email   
         modificar(diferencias)
         handleClickSnackBar()
       }
