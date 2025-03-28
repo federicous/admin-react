@@ -267,7 +267,7 @@ export default function FullFeaturedCrudGrid() {
 		// { field: 'email', headerName: 'Email', width: 230, flex:1.5, minWidth:110, editable: true, renderCell:(params) => (<EmailCell value={params.row.email}  />)},
 		// { field: 'fecha', headerName: 'Fecha', width: 130, flex:0.8, minWidth:110, type:"date", valueGetter: ({value}) => value && dayjs(value,'DD/MM/YYYY').toDate(), },
 		{ field: 'ferreteria', headerName: 'Ferreteria', width: 130, flex:0.8, minWidth:110, editable: true, },
-		{ field: 'vendedor', headerName: 'Vendedor', width: 130, flex:0.8 , minWidth:110, editable: true,
+		{ field: 'vendedor', headerName: 'Vendedor', width: 100, flex:0.4 , minWidth:100, editable: true,
       type: 'singleSelect',
       valueOptions: ['Leonel', 'Moises'],
       valueGetter: (params) => params.row.vendedor ? capitalizeFirstLetter(params.row.vendedor) : ""
@@ -299,12 +299,18 @@ export default function FullFeaturedCrudGrid() {
 		{ field: 'address', headerName: 'Dirección', width: 130, flex:0.8 , minWidth:110, editable: true,},
 		{ field: 'cuit', headerName: 'Cuit', width: 130, flex:0.8 , minWidth:110, editable: true, type: "number"},
 		{ field: 'phone', headerName: 'Tel', width: 130, flex:0.8 , minWidth:110, editable: true, type: "number"},
-		{ field: 'descuento', headerName: 'Desc[%]', width: 130, flex:0.8 , minWidth:110, editable: true, type: "number", headerAlign:'center', align:'center'},
-		{ field: 'isAdmin', headerName: 'Admin', width: 130, flex:0.8 , minWidth:110, editable: true, headerAlign:'center', align:'center',
+		{ field: 'descuento', headerName: 'Desc[%]', width: 70, flex:0.4 , minWidth:70, editable: true, type: "number", headerAlign:'center', align:'center'},
+		{ field: 'isAdmin', headerName: 'Admin', width: 70, flex:0.4 , minWidth:70, editable: true, headerAlign:'center', align:'center',
       type: 'singleSelect',
       valueOptions: ['on', 'off'],
       valueGetter: (params) => params.row.isAdmin ? params.row.isAdmin : ""
     },
+		{ field: 'isSeller', headerName: 'Vende', width: 70, flex:0.4 , minWidth:70, editable: true, headerAlign:'center', align:'center',
+      type: 'singleSelect',
+      valueOptions: ['on', 'off'],
+      valueGetter: (params) => params.row.isSeller ? params.row.isSeller : ""
+    },
+		{ field: 'IdVendedor', headerName: 'ID Venta', width: 130, flex:0.8 , minWidth:110, editable: true,},
 		{ field: 'nuevoCliente', headerName: 'nuevo', width: 130, flex:0.8 , minWidth:110, editable: true, headerAlign:'center', align:'center'},
 		{ field: 'password', headerName: 'Clave', type: 'password', width: 130, flex:0.8 , minWidth:110, renderCell:(params) => ("**********"), editable: true, },
 		{
