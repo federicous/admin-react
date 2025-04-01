@@ -175,7 +175,21 @@ export default function FullFeaturedCrudGrid() {
   const [showPassword, setShowPassword] = React.useState(false);
   const [openSnackBar, setOpenSnackBar] = React.useState(false);
   const [openSnackBarError, setOpenSnackBarError] = React.useState(false);
-  
+  const [vendedorArray, setVendedorArray] = React.useState([]);
+
+  React.useEffect(() => {
+    apiQuery.get(`/permisos/vende`)
+    .then((respuesta)=>{
+      // Paso 1: Extraer los nombres usando map()
+      const nombres = respuesta.map(item => (item.IdVendedor ? capitalizeFirstLetter(item.IdVendedor) : item.email));
+
+      // Paso 2: Ordenar los nombres alfabéticamente usando sort()
+      nombres.sort((a, b) => a.localeCompare(b));
+      setVendedorArray(nombres)
+      // console.log(respuesta);      
+    })
+  }, [])
+
   const handleClickSnackBar = () => {
     setOpenSnackBar(true);
   };
@@ -269,7 +283,8 @@ export default function FullFeaturedCrudGrid() {
 		{ field: 'ferreteria', headerName: 'Ferreteria', width: 130, flex:0.8, minWidth:110, editable: true, },
 		{ field: 'vendedor', headerName: 'Vendedor', width: 100, flex:0.4 , minWidth:100, editable: true,
       type: 'singleSelect',
-      valueOptions: ['Leonel', 'Moises'],
+      // valueOptions: ['Leonel', 'Moises'],
+      valueOptions: vendedorArray,
       valueGetter: (params) => params.row.vendedor ? capitalizeFirstLetter(params.row.vendedor) : ""
     },
 		{ field: 'provincia', headerName: 'Provincia', width: 130, flex:0.8 , minWidth:110, editable: true,
