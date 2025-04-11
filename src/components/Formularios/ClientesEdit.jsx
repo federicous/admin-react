@@ -315,6 +315,11 @@ export default function FullFeaturedCrudGrid() {
 		{ field: 'cuit', headerName: 'Cuit', width: 130, flex:0.8 , minWidth:110, editable: true, type: "number"},
 		{ field: 'phone', headerName: 'Tel', width: 130, flex:0.8 , minWidth:110, editable: true, type: "number"},
 		{ field: 'descuento', headerName: 'Desc[%]', width: 70, flex:0.4 , minWidth:70, editable: true, type: "number", headerAlign:'center', align:'center'},
+    { field: 'enable', headerName: 'Hablitar', width: 70, flex:0.4 , minWidth:70, editable: true, headerAlign:'center', align:'center',
+      type: 'singleSelect',
+      valueOptions: ['on', 'off'],
+      valueGetter: (params) => params.row.enable ? params.row.enable : ""
+    },
 		{ field: 'isAdmin', headerName: 'Admin', width: 70, flex:0.4 , minWidth:70, editable: true, headerAlign:'center', align:'center',
       type: 'singleSelect',
       valueOptions: ['on', 'off'],
