@@ -320,6 +320,11 @@ export default function FullFeaturedCrudGrid() {
       valueOptions: ['on', 'off'],
       valueGetter: (params) => params.row.enable ? params.row.enable : ""
     },
+    { field: 'descargas', headerName: 'Descargas', width: 80, flex:0.4 , minWidth:80, editable: true, headerAlign:'center', align:'center',
+      type: 'singleSelect',
+      valueOptions: ['on', 'off'],
+      valueGetter: (params) => params.row.descargas ? params.row.descargas : ""
+    },
 		{ field: 'isAdmin', headerName: 'Admin', width: 70, flex:0.4 , minWidth:70, editable: true, headerAlign:'center', align:'center',
       type: 'singleSelect',
       valueOptions: ['on', 'off'],
@@ -332,7 +337,7 @@ export default function FullFeaturedCrudGrid() {
     },
 		{ field: 'IdVendedor', headerName: 'ID Venta', width: 130, flex:0.8 , minWidth:110, editable: true,},
 		{ field: 'nuevoCliente', headerName: 'nuevo', width: 130, flex:0.8 , minWidth:110, editable: true, headerAlign:'center', align:'center'},
-		{ field: 'password', headerName: 'Clave', type: 'password', width: 130, flex:0.8 , minWidth:110, renderCell:(params) => ("**********"), editable: true, },
+		{ field: 'password', headerName: 'Clave', type: 'password', width: 130, flex:0.8 , minWidth:100, renderCell:(params) => ("**********"), editable: true, },
 		{
 			field: 'actions',
 			type: 'actions',
