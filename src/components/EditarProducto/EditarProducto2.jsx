@@ -525,6 +525,9 @@ export default function AddProduct() {
                               "unidades",
                               "pricepack",
                               "precioOferta",
+                              "ventaMinima",
+                              "ofertaUno",
+                              "ofertaDos",
                             ].includes(key)
                               ? "number"
                               : "text"
@@ -562,15 +565,15 @@ export default function AddProduct() {
                               id="demo-simple-select-outlined"
                               // value={iva ? iva : producto.iva}
                               value={
-                                camposObject["multiplo"]
+                                camposObject["multiplicador"]
                                 // ? camposObject[key]
                                 // : producto[key]
                               }
                               // value={"3"}
                               // onChange={handleIva}
                               onChange={handleKey}
-                              label="Multiplo"
-                              name="multiplo"
+                              label="Multiplicador"
+                              name="multiplicador"
                               sx={{ width: "100%" }}
                             />
                           </FormControl>
