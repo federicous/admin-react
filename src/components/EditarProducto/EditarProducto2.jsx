@@ -317,6 +317,7 @@ export default function AddProduct() {
       ofertaUno: "Oferta I",
       ofertaDos: "Oferta II",
       ventaMinima: "Venta minima",
+      multiplicador: "Multiplicador",
       __v: "Version",
     };
     return Diccionario[palabra];
