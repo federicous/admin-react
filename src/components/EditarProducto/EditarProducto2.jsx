@@ -63,7 +63,8 @@ let kantonCampos = [
   "lista",
   "code",
   "name",
-  "price",
+  // "price",
+  "precioConIva",
   "iva",
   "pricepack",
   "description",
@@ -297,6 +298,7 @@ export default function AddProduct() {
       origin: "Origen",
       iva: "iva",
       price: "Precio",
+      precioConIva: "Precio con IVA",
       pricepack: "Precio Pack",
       stock: "Stock",
       description: "Descripcion",
@@ -528,6 +530,7 @@ export default function AddProduct() {
                               "ventaMinima",
                               "ofertaUno",
                               "ofertaDos",
+                              "precioConIva",
                             ].includes(key)
                               ? "number"
                               : "text"
