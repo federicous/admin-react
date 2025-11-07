@@ -135,6 +135,18 @@ let interquim = [
   "precioOferta",
   "novedades",
 ];
+let einhellCampos = [
+  "name",
+  "lista",
+  "code",
+  "price",
+  "iva",
+  "oferta",
+  "precioOferta",
+  "novedades",
+  "description",
+  "categoria",
+];
 
 const campos = (lista) => {
   if (lista == "tekbond") {
@@ -153,6 +165,10 @@ const campos = (lista) => {
     return brmElectroCampos;
   } else if (lista == "interquim") {
     return interquim;
+  } else if (lista == "einhell") {
+    return einhellCampos;
+  } else {
+    return [];
   }
 };
 
@@ -318,6 +334,7 @@ export default function AddProduct() {
       ofertaDos: "Oferta II",
       ventaMinima: "Venta minima",
       multiplicador: "Multiplicador",
+      categoria: "Categoria",
       __v: "Version",
     };
     return Diccionario[palabra];
@@ -496,8 +513,10 @@ export default function AddProduct() {
                         <TextField
                           required={
                             [
+                              "name",
                               "code",
                               "description",
+                              "categoria",
                               "unidades",
                               "contenido",
                               "lista",
