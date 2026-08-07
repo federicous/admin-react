@@ -46,10 +46,10 @@ import Promo from "../Promo/Promo";
 import ImagenPromo from "../ImagenPromo/ImagenPromo"
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import DownloadIcon from "@mui/icons-material/GetApp";
-import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
-import { GetApp } from "@mui/icons-material";
+import SettingsIcon from "@mui/icons-material/Settings";
 import ResetPassword from "../ResetPassword/ResetPassword";
 import Clientes from "../Clientes/Clientes";
+import Configuracion from "../Configuracion/Configuracion";
 // import ApiQuery from "../utils/apiQuery/apiQuery"
 // let apiQuery = new ApiQuery();
 
@@ -242,7 +242,15 @@ function ResponsiveDrawer(props) {
               </ListItemButton>
             </Link>
           </List>
-        </Collapse>
+        {/* CONFIGURACION #############################################*/}
+        <Link to="/configuracion" style={{ textDecoration: "none" }}>
+          <ListItemButton>
+            <ListItemIcon>
+              <SettingsIcon />
+            </ListItemIcon>
+            <ListItemText primary="Configuración" sx={{ color: "text.primary" }} />
+          </ListItemButton>
+        </Link>
       </List>
       <Divider />
     </div>
@@ -330,6 +338,7 @@ function ResponsiveDrawer(props) {
             <Route exact path="/imagen" element={<ImagenPromo />} />
             <Route exact path="/resetPassword" element={<ResetPassword />} />
             <Route exact path="/clientes" element={<Clientes />} />
+            <Route exact path="/configuracion" element={<Configuracion />} />
             {/* <Route exact path="/"  element={<Login />}/>
               <Route path="/" element={<ProtectedRoutes />}>
                 <Route path="/home" element={<HomePage2 />} />
