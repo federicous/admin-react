@@ -20,6 +20,7 @@ import Cookies from "universal-cookie";
 // import {config} from "../../config/config"
 import { config } from "../../config/config";
 
+import { establishSession, currentToken } from "../sharedSession";
 const cookies = new Cookies();
 
 export default function Login() {
@@ -40,6 +41,7 @@ export default function Login() {
 
   const token = cookies.get("token");
   let navigate = useNavigate();
+  useEffect(() => { if(currentToken()) navigate("/ordenes",{replace:true}); },[navigate]);
 
   const handleSubmit = (e) => {
     // prevent the form from refreshing the whole page
@@ -51,6 +53,7 @@ export default function Login() {
     const configuration = {
       method: "post",
       url: `${config.SERVER}/login`,
+      withCredentials: true,
       data: {
         email,
         password,
@@ -61,13 +64,8 @@ export default function Login() {
     axios(configuration)
       .then((result) => {
         setLogin(true);
-        // setUser(cookies.get("user"));
-        cookies.set("token", result.data.token, {
-          path: "/",
-        });
-        cookies.set("user", result.data.email, {
-          path: "/",
-        });
+        // setUser(result.data.email);
+        establishSession(result.data);
         // navigate(`/`, { replace: true });
         setOpen(false);
         window.location.href = "/";

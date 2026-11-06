@@ -1,3 +1,4 @@
+import { publicUserRow, userUpdate } from "./userPayload";
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -181,6 +182,7 @@ export default function FullFeaturedCrudGrid() {
     apiQuery.get(`/permisos/vende`)
     .then((respuesta)=>{
       // Paso 1: Extraer los nombres usando map()
+      if (!Array.isArray(respuesta)) return;
       const nombres = respuesta.map(item => (item.IdVendedor ? capitalizeFirstLetter(item.IdVendedor) : item.email));
 
       // Paso 2: Ordenar los nombres alfabéticamente usando sort()
@@ -210,33 +212,16 @@ export default function FullFeaturedCrudGrid() {
     setOpenSnackBarError(false);
   };
 
-  const registrar = (usuario) => {
-    console.log(usuario);
-    // return
-    delete usuario.nuevoCliente
-    delete usuario._id
-
-    apiQuery.postSimple(`/api/users`, usuario)
-    .then((res) => {
-      // setListaClientes(res);
-      // setRows(res)
-      console.log(res);		
-      setOpen(false);
-    })
+  const registrar = async (usuario) => {
+    const payload={...usuario};delete payload.nuevoCliente;delete payload._id;delete payload.isNew;
+    const response=await apiQuery.postSimple(`/api/users`,payload);
+    if(!response)throw Error('No se confirmó el alta');
+    setOpen(false);return response;
   };
-
-  const modificar = (usuario) => {
-    console.log(usuario);
-    // return
-    delete usuario.nuevoCliente
-    delete usuario.isNew
-    apiQuery.put(`/api/users`, usuario)
-    .then((res) => {
-      // setListaClientes(res);
-      // setRows(res)
-      console.log(res);		
-      setOpen(false);
-    })
+  const modificar = async (usuario) => {
+    const response=await apiQuery.put(`/api/users`,usuario);
+    if(!response)throw Error('No se confirmó la modificación');
+    setOpen(false);return response;
   };
 
   const eliminarUsuario = (usuario) => {
@@ -245,7 +230,7 @@ export default function FullFeaturedCrudGrid() {
     apiQuery.deleteSimple(`/api/users`, usuario)
     .then((res) => {
       // setListaClientes(res);
-      // setRows(res)
+      // setRows(Array.isArray(res) ? res.map(publicUserRow) : [])
       console.log(res);		
       setOpen(false);
     })
@@ -404,7 +389,7 @@ export default function FullFeaturedCrudGrid() {
 	.then((res) => {
 		if (cancel) return;
 		setListaClientes(res);
-		setRows(res)
+		setRows(Array.isArray(res) ? res.map(publicUserRow) : [])
 		// console.log(res);		
 		setOpen(false);
 	})
@@ -453,48 +438,17 @@ export default function FullFeaturedCrudGrid() {
     }
   };
 
-  const processRowUpdate = (newRow) => {
-    const updatedRow = { ...newRow, isNew: false };
-    // console.log(rows);
-    setRows(rows.map((row) => (row._id === newRow._id ? updatedRow : row)));
-    // console.log(rows);
-    // console.log(updatedRow);
-    if (updatedRow.name && updatedRow.email && updatedRow.password && updatedRow.address && updatedRow.cuit && updatedRow.ferreteria && updatedRow.phone && updatedRow.provincia && updatedRow.localidad && updatedRow.vendedor) {
-      console.log(`COMPLETO`);
-      if (updatedRow.nuevoCliente) {
-        console.log(`REGISTRAR`);
-        // delete updatedRow.nuevoCliente
-        // delete updatedRow._id
-        registrar({...updatedRow})
-        handleClickSnackBar()
-        // let filaOriginal = rows.filter((row) => row._id == updatedRow._id);
-        // const diferencias = compararObjetos(filaOriginal[0], updatedRow);
-        // diferencias._id = updatedRow._id
-        // console.log(diferencias);
-        // return updatedRow;
-      } else {
-        console.log(`MODIFICAR`);
-        // delete updatedRow.nuevoCliente
-        // delete updatedRow.isNew
-        let filaOriginal = rows.filter((row) => row._id == updatedRow._id);
-        const diferencias = compararObjetos(filaOriginal[0], updatedRow);
-        diferencias._id = updatedRow._id     
-        diferencias.email = updatedRow.email   
-        modificar(diferencias)
-        handleClickSnackBar()
-      }
-    } else {
-      console.log(`FALTAN`);  
-      let filaOriginal = rows.filter((row) => row._id == updatedRow._id);
-      handleClickSnackBarError()
-      return filaOriginal;
-    }
-    let filaOriginal = rows.filter((row) => row._id == updatedRow._id);
-    const diferencias = compararObjetos(filaOriginal[0], updatedRow);
-    diferencias._id = updatedRow._id
-    console.log(diferencias);
-    
-    return updatedRow;
+  const processRowUpdate = async (newRow,oldRow) => {
+    const original=oldRow || rows.find(row=>row._id===newRow._id) || {};
+    try {
+      if(!newRow.name||!newRow.email)throw Error('Completá nombre y email');
+      if(newRow.nuevoCliente){
+        if(!newRow.password||!newRow.address||!newRow.cuit||!newRow.ferreteria||!newRow.phone||!newRow.provincia||!newRow.localidad||!newRow.vendedor)throw Error('Completá los campos del usuario nuevo');
+        await registrar({...newRow});
+      }else await modificar(userUpdate(newRow,original));
+      const updatedRow=publicUserRow({...newRow,isNew:false});
+      setRows(previous=>previous.map(row=>row._id===newRow._id?updatedRow:row));handleClickSnackBar();return updatedRow;
+    }catch(error){handleClickSnackBarError();throw error;}
   };
 
   const handleRowModesModelChange = (newRowModesModel) => {
@@ -664,6 +618,7 @@ export default function FullFeaturedCrudGrid() {
         onRowModesModelChange={handleRowModesModelChange}
         onRowEditStop={handleRowEditStop}
         processRowUpdate={processRowUpdate}
+        onProcessRowUpdateError={handleClickSnackBarError}
         columnVisibilityModel={columnVisibilityModel}
         slots={{ toolbar: EditToolbar }}
         slotProps={{

@@ -53,6 +53,9 @@ import Configuracion from "../Configuracion/Configuracion";
 // import ApiQuery from "../utils/apiQuery/apiQuery"
 // let apiQuery = new ApiQuery();
 
+import CardGiftcardIcon from "@mui/icons-material/CardGiftcard";
+import SessionGate from "../SessionGate";
+import SharedSessionControl from "../SharedSessionControl";
 const drawerWidth = 240;
 
 function ResponsiveDrawer(props) {
@@ -242,6 +245,7 @@ function ResponsiveDrawer(props) {
               </ListItemButton>
             </Link>
           </List>
+        </Collapse>
         {/* CONFIGURACION #############################################*/}
         <Link to="/configuracion" style={{ textDecoration: "none" }}>
           <ListItemButton>
@@ -283,6 +287,7 @@ function ResponsiveDrawer(props) {
             <Typography variant="h6" noWrap component="div">
               Administrador
             </Typography>
+            <SharedSessionControl />
           </Toolbar>
         </AppBar>
         <Box
@@ -325,6 +330,7 @@ function ResponsiveDrawer(props) {
         </Box>
         <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
           <Toolbar />
+          <SessionGate requireAdmin>
           <Routes>
             <Route exact path="/" element={<Login />} />
             <Route exact path="/productos/" element={<Productos />} />
@@ -348,6 +354,7 @@ function ResponsiveDrawer(props) {
               </Route>
               <Route exact path="*" element={<Return />} />  */}
           </Routes>
+          </SessionGate>
         </Box>
       </Box>
     </BrowserRouter>
