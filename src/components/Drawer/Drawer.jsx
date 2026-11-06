@@ -155,7 +155,7 @@ function ResponsiveDrawer(props) {
             <Link to="/descargas" style={{ textDecoration: "none" }}>
               <ListItemButton sx={{ pl: 4 }}>
                 <ListItemIcon>
-                  <GetApp />
+                  <DownloadIcon />
                 </ListItemIcon>
                 <ListItemText
                   primary="Descargas"
