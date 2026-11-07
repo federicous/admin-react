@@ -102,7 +102,7 @@ function EditToolbar(props) {
     const nuevoCliente = true;
     setRows((oldRows) => [
       ...oldRows,
-      { _id, nuevoCliente: nuevoCliente , name: '', email: '', ferreteria: '',vendedor: '',localidad: '',provincia:'',address:'',cuit:'',phone:'',password:'', isNew: true },
+      { _id, nuevoCliente: nuevoCliente , name: '', email: '', ferreteria: '',vendedor: '',localidad: '',provincia:'',address:'',cuit:'',phone:'',password:'', isManagement:'off', isNew: true },
     ]);
     setRowModesModel((oldModel) => ({
       ...oldModel,
@@ -319,6 +319,11 @@ export default function FullFeaturedCrudGrid() {
       type: 'singleSelect',
       valueOptions: ['on', 'off'],
       valueGetter: (params) => params.row.isSeller ? params.row.isSeller : ""
+    },
+		{ field: 'isManagement', headerName: 'Gestión', width: 80, flex:0.45, minWidth:80, editable: true, headerAlign:'center', align:'center',
+      type: 'singleSelect',
+      valueOptions: ['on', 'off'],
+      valueGetter: (params) => params.row.isManagement === true || params.row.isManagement === 'true' ? 'on' : (params.row.isManagement || 'off')
     },
 		{ field: 'IdVendedor', headerName: 'ID Venta', width: 130, flex:0.8 , minWidth:110, editable: true,},
 		{ field: 'nuevoCliente', headerName: 'nuevo', width: 130, flex:0.8 , minWidth:110, editable: true, headerAlign:'center', align:'center'},

@@ -1,8 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import App from './App';
-
-test('renders learn react link', () => {
-  render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+jest.mock('./components/Main/Main',()=>()=> <div>Aplicación administrativa</div>);
+test('mounts the administrative application entrypoint',()=>{
+ render(<App/>);
+ expect(screen.getByText('Aplicación administrativa')).toBeInTheDocument();
 });
