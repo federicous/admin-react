@@ -329,7 +329,7 @@ function ResponsiveDrawer(props) {
             {drawer}
           </Drawer>
         </Box>
-        <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+        <Box component="main" sx={{ flexGrow: 1, p: 3, minWidth: 0 }}>
           <Toolbar />
           <SessionGate requireAdmin>
           <Routes>

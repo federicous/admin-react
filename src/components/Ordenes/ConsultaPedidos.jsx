@@ -147,7 +147,7 @@ export default function ConsultaPedidos() {
       {
         field: 'timestamp',
         headerName: 'Fecha',
-        minWidth: 175,
+        minWidth: 155,
         flex: 1,
         sortable: false,
         valueGetter: ({ row }) => fecha(row.timestamp),
@@ -155,21 +155,21 @@ export default function ConsultaPedidos() {
       {
         field: 'id',
         headerName: 'ID',
-        minWidth: 215,
+        minWidth: 205,
         flex: 1.2,
         sortable: false,
       },
       {
         field: 'email',
         headerName: 'Cliente',
-        minWidth: 200,
-        flex: 1.2,
+        minWidth: 170,
+        flex: 1.1,
         sortable: false,
       },
       {
         field: 'presupuesto',
         headerName: 'Tipo',
-        minWidth: 115,
+        minWidth: 100,
         flex: 0.6,
         sortable: false,
         valueGetter: ({ row }) => (row.presupuesto ? 'Presupuesto' : 'Pedido'),
@@ -177,15 +177,15 @@ export default function ConsultaPedidos() {
       {
         field: 'notificationStatus',
         headerName: 'Correo',
-        minWidth: 240,
-        flex: 1.3,
+        minWidth: 190,
+        flex: 1.2,
         sortable: false,
         valueGetter: ({ row }) => estado[row.notificationStatus] || estado.unavailable,
       },
       {
         field: 'acciones',
         headerName: '',
-        minWidth: 130,
+        minWidth: 120,
         sortable: false,
         align: 'right',
         renderCell: ({ row }) => (
@@ -211,10 +211,11 @@ export default function ConsultaPedidos() {
           ['from', 'Desde', 'date'],
           ['to', 'Hasta', 'date'],
         ].map(([key, label, type]) => (
-          <label key={key} style={{ display: 'inline-block', marginRight: 12 }}>
+          <label key={key} style={{ display: 'inline-block', marginRight: 12, maxWidth: '100%' }}>
             {label}
             <input
               type={type}
+              style={{ maxWidth: '100%' }}
               value={filters[key]}
               onChange={e => setFilters({ ...filters, [key]: e.target.value })}
             />
@@ -225,7 +226,7 @@ export default function ConsultaPedidos() {
       {loading && <p role="status">Cargando pedidos…</p>}
       {error && <p role="alert">{error}</p>}
       {!error && (
-        <Box sx={{ height: 520, width: '100%', mt: 2 }}>
+        <Box sx={{ height: 520, width: '100%', minWidth: 0, mt: 2 }}>
           <DataGrid
             rows={rows}
             columns={columns}
@@ -243,6 +244,7 @@ export default function ConsultaPedidos() {
             disableDensitySelector
             disableRowSelectionOnClick
             hideFooterSelectedRowCount
+            columnBuffer={6}
             disableVirtualization={process.env.NODE_ENV === 'test'}
             localeText={LOCALE_TEXT}
             slots={{ pagination: CursorPagination }}
@@ -268,34 +270,36 @@ export default function ConsultaPedidos() {
             {detail.order.presupuesto ? 'Presupuesto' : 'Pedido'} ·{' '}
             {estado[detail.status] || estado.unavailable}
           </p>
-          <table>
-            <thead>
-              <tr>
-                <th>Código</th>
-                <th>Producto</th>
-                <th>Cantidad</th>
-                <th>Precio registrado</th>
-                <th>IVA registrado</th>
-              </tr>
-            </thead>
-            <tbody>
-              {(detail.order.productList || []).map((p, i) => (
-                <tr key={i}>
-                  <td>{p.code}</td>
-                  <td>{p.name}</td>
-                  <td>{p.qty}</td>
-                  <td>
-                    {p.price != null && p.price !== ''
-                      ? String(p.price)
-                      : p.usd != null && p.usd !== ''
-                      ? `USD ${p.usd}`
-                      : 'No disponible'}
-                  </td>
-                  <td>{p.iva != null && p.iva !== '' ? String(p.iva) : 'No disponible'}</td>
+          <Box sx={{ width: '100%', overflowX: 'auto' }}>
+            <table>
+              <thead>
+                <tr>
+                  <th>Código</th>
+                  <th>Producto</th>
+                  <th>Cantidad</th>
+                  <th>Precio registrado</th>
+                  <th>IVA registrado</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {(detail.order.productList || []).map((p, i) => (
+                  <tr key={i}>
+                    <td>{p.code}</td>
+                    <td>{p.name}</td>
+                    <td>{p.qty}</td>
+                    <td>
+                      {p.price != null && p.price !== ''
+                        ? String(p.price)
+                        : p.usd != null && p.usd !== ''
+                        ? `USD ${p.usd}`
+                        : 'No disponible'}
+                    </td>
+                    <td>{p.iva != null && p.iva !== '' ? String(p.iva) : 'No disponible'}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </Box>
           <p>Los precios son los datos guardados en el pedido; no representan necesariamente el total facturado.</p>
         </section>
       )}
