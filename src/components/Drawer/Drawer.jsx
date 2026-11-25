@@ -35,7 +35,7 @@ import HandymanIcon from "@mui/icons-material/Handyman";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 
 import Productos from "../Productos/Productos";
-import Ordenes from "../Ordenes/Ordenes";
+import Ordenes from "../Ordenes/ConsultaPedidos";
 import Listas from "../Listas/Listas";
 import Usuarios from "../Usuarios/Usuarios";
 import EditarProducto2 from "../EditarProducto/EditarProducto2";
@@ -100,6 +100,7 @@ function ResponsiveDrawer(props) {
       <Toolbar />
       <Divider />
       <List>
+        <Link to="/ordenes" style={{ textDecoration: 'none', color: 'inherit' }}><ListItemButton><ListItemIcon><ListAltIcon /></ListItemIcon><ListItemText primary="Pedidos" /></ListItemButton></Link>
         {/* PRODUCTOS #############################################*/}
         <ListItemButton onClick={handleClick}>
           <ListItemIcon>
