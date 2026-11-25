@@ -32,3 +32,20 @@ test('una respuesta tardía no reemplaza el último detalle elegido',async()=>{
   await waitFor(()=>expect(screen.queryByRole('heading',{name:'Pedido one'})).not.toBeInTheDocument());
   expect(screen.getByRole('heading',{name:'Pedido two'})).toBeInTheDocument();
 });
+test('aplica filtros en el servidor y navega páginas sin mezclar resultados',async()=>{
+  axios.get.mockReset();
+  axios.get.mockImplementation((_url,{params})=>Promise.resolve({data:params.before?{orders:[{id:'dos',email:'dos@example.test',presupuesto:'si'}],nextCursor:null}:{orders:[{id:'uno',email:'uno@example.test',presupuesto:false}],nextCursor:'cursor1'}}));
+  render(<ConsultaPedidos/>);
+  expect(await screen.findByText('uno@example.test')).toBeInTheDocument();
+  fireEvent.click(screen.getByText('Siguientes'));
+  expect(await screen.findByText('dos@example.test')).toBeInTheDocument();
+  expect(screen.getByText('Presupuesto')).toBeInTheDocument();
+  expect(screen.queryByText('uno@example.test')).not.toBeInTheDocument();
+  fireEvent.click(screen.getByText('Anterior'));
+  expect(await screen.findByText('uno@example.test')).toBeInTheDocument();
+  fireEvent.change(screen.getByLabelText('Correo del cliente'),{target:{value:'uno@example.test'}});
+  fireEvent.change(screen.getByLabelText('Desde'),{target:{value:'2026-11-16'}});
+  fireEvent.click(screen.getByText('Buscar'));
+  await waitFor(()=>expect(axios.get).toHaveBeenLastCalledWith(expect.stringContaining('/admin/list'),{params:{email:'uno@example.test',from:'2026-11-16'}}));
+  expect(await screen.findByText('Anterior')).toBeDisabled();
+});
