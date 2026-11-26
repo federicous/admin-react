@@ -4,6 +4,11 @@ import {
   Alert,
   Box,
   Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Divider,
   MenuItem,
   Paper,
   Stack,
@@ -16,6 +21,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import {
   DataGrid,
   GridToolbarColumnsButton,
@@ -31,6 +37,39 @@ const estado = {
   review: 'Requiere revisión',
   unavailable: 'Sin información de correo',
 };
+
+const ESTADO_AYUDA = [
+  {
+    key: 'pending',
+    label: estado.pending,
+    description:
+      'La notificación quedó en cola al registrar el pedido o presupuesto, o aguarda un reintento automático programado tras un rechazo temporal del servidor SMTP (hasta 6 intentos).',
+  },
+  {
+    key: 'sending',
+    label: estado.sending,
+    description:
+      'El proceso en segundo plano tomó el correo y está intentando entregarlo al servidor SMTP en este momento. Si se interrumpiera sin completar, pasa a revisión para evitar duplicados.',
+  },
+  {
+    key: 'accepted',
+    label: estado.accepted,
+    description:
+      'El servidor de correo saliente (SMTP) aceptó el mensaje para todos los destinatarios configurados. No confirma entrega en bandeja final, recepción, apertura ni lectura por el destinatario.',
+  },
+  {
+    key: 'review',
+    label: estado.review,
+    description:
+      'El envío tuvo un rechazo definitivo o parcial, o un corte sin confirmación segura. No se reenvía automáticamente para evitar correos duplicados y requiere verificación operativa.',
+  },
+  {
+    key: 'unavailable',
+    label: estado.unavailable,
+    description:
+      'No existe registro de estado de correo para esta operación (por ejemplo, pedidos históricos anteriores al seguimiento). No significa que el correo no se haya enviado ni que haya fallado.',
+  },
+];
 
 const fecha = value => {
   const n = Number(value);
@@ -186,6 +225,7 @@ export default function ConsultaPedidos() {
   const [detail, setDetail] = useState(null);
   const [detailError, setDetailError] = useState('');
   const [columnVisibilityModel, setColumnVisibilityModel] = useState({});
+  const [helpOpen, setHelpOpen] = useState(false);
   const detailRequest = useRef(0);
 
   useEffect(() => () => {
@@ -367,12 +407,72 @@ export default function ConsultaPedidos() {
 
   return (
     <Box component="main" sx={{ minWidth: 0 }}>
-      <Typography variant="h4" component="h1" gutterBottom>
-        Pedidos
-      </Typography>
-      <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-        Consulta y conciliación: la aceptación del correo no confirma su recepción ni la preparación del pedido.
-      </Typography>
+      <Box
+        sx={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          justifyContent: 'space-between',
+          alignItems: 'flex-start',
+          gap: 1.5,
+          mb: 2,
+        }}
+      >
+        <Box sx={{ minWidth: 0 }}>
+          <Typography variant="h4" component="h1" gutterBottom>
+            Pedidos
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            Consulta y conciliación: la aceptación del correo no confirma su recepción ni la preparación del pedido.
+          </Typography>
+        </Box>
+        <Button
+          type="button"
+          variant="outlined"
+          size="small"
+          startIcon={<HelpOutlineIcon />}
+          onClick={() => setHelpOpen(true)}
+          aria-haspopup="dialog"
+          aria-expanded={helpOpen}
+          aria-controls={helpOpen ? 'estado-correo-ayuda-dialog' : undefined}
+        >
+          ¿Qué significan los estados de correo?
+        </Button>
+      </Box>
+
+      <Dialog
+        id="estado-correo-ayuda-dialog"
+        open={helpOpen}
+        onClose={() => setHelpOpen(false)}
+        aria-labelledby="estado-correo-ayuda-title"
+        aria-describedby="estado-correo-ayuda-desc"
+        fullWidth
+        maxWidth="sm"
+        scroll="paper"
+      >
+        <DialogTitle id="estado-correo-ayuda-title">Estados de correo en Pedidos</DialogTitle>
+        <DialogContent id="estado-correo-ayuda-desc" dividers>
+          <Alert severity="info" sx={{ mb: 2 }}>
+            Estos estados informan únicamente la notificación por correo electrónico. No indican preparación, stock, aprobación comercial, facturación ni entrega del pedido.
+          </Alert>
+          <Stack spacing={1.5} divider={<Divider flexItem />}>
+            {ESTADO_AYUDA.map(item => (
+              <Box key={item.key}>
+                <Typography variant="subtitle2" component="h3">
+                  {item.label}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {item.description}
+                </Typography>
+              </Box>
+            ))}
+          </Stack>
+        </DialogContent>
+        <DialogActions>
+          <Button type="button" variant="contained" onClick={() => setHelpOpen(false)} autoFocus>
+            Cerrar
+          </Button>
+        </DialogActions>
+      </Dialog>
 
       <Paper component="form" variant="outlined" onSubmit={buscar} sx={{ p: 2, mb: 2 }}>
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1.5, alignItems: 'center' }}>

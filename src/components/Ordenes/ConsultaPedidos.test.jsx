@@ -344,3 +344,42 @@ test('aplica filtros combinados en servidor (incluyendo tipo y estado), limpia f
   );
   await waitFor(() => expect(screen.getByRole('button', { name: 'Limpiar' })).toBeEnabled());
 });
+
+test('ayuda contextual explica todos los estados reales de correo sin mutaciones ni reenvíos', async () => {
+  axios.get.mockResolvedValue({ data: { orders: [], nextCursor: null } });
+  render(<ConsultaPedidos />);
+
+  const helpButton = await screen.findByRole('button', { name: '¿Qué significan los estados de correo?' });
+  expect(helpButton).toHaveAttribute('aria-haspopup', 'dialog');
+  expect(helpButton).toHaveAttribute('aria-expanded', 'false');
+
+  const getCallsBefore = axios.get.mock.calls.length;
+  fireEvent.click(helpButton);
+
+  const dialog = await screen.findByRole('dialog', { name: 'Estados de correo en Pedidos' });
+  expect(helpButton).toHaveAttribute('aria-expanded', 'true');
+
+  expect(within(dialog).getByText(/No indican preparación, stock, aprobación comercial, facturación ni entrega/i)).toBeInTheDocument();
+  expect(within(dialog).getByText('Pendiente de envío')).toBeInTheDocument();
+  expect(within(dialog).getByText('Enviando')).toBeInTheDocument();
+  expect(within(dialog).getByText('Aceptado por el proveedor (no confirma recepción)')).toBeInTheDocument();
+  expect(within(dialog).getByText(/No confirma entrega en bandeja final, recepción, apertura ni lectura/i)).toBeInTheDocument();
+  expect(within(dialog).getByText('Requiere revisión')).toBeInTheDocument();
+  expect(within(dialog).getByText('Sin información de correo')).toBeInTheDocument();
+  expect(within(dialog).getByText(/No significa que el correo no se haya enviado ni que haya fallado/i)).toBeInTheDocument();
+  expect(within(dialog).queryByRole('button', { name: /reenviar/i })).not.toBeInTheDocument();
+
+  fireEvent.click(within(dialog).getByRole('button', { name: 'Cerrar' }));
+  await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
+
+  fireEvent.click(helpButton);
+  const reopened = await screen.findByRole('dialog', { name: 'Estados de correo en Pedidos' });
+  fireEvent.keyDown(reopened, { key: 'Escape', code: 'Escape' });
+  await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
+
+  expect(axios.get).toHaveBeenCalledTimes(getCallsBefore);
+  expect(axios.post).not.toHaveBeenCalled();
+  expect(axios.put).not.toHaveBeenCalled();
+  expect(axios.patch).not.toHaveBeenCalled();
+  expect(axios.delete).not.toHaveBeenCalled();
+});
